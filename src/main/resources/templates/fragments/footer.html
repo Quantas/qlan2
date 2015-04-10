@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
 </head>
 <body>
-<div th:fragment="footer">
+<div layout:fragment="footer">
     FOOTER
     <span sec:authorize="isAuthenticated()">
         <form th:action="@{/logout}" method="post">
