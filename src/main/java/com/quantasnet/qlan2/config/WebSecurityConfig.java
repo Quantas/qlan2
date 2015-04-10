@@ -37,7 +37,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .permitAll()
             .and()
-                .requiresChannel().anyRequest().requires(channel);
+                .requiresChannel().anyRequest().requires(channel)
+            .and()
+                .sessionManagement().sessionFixation().changeSessionId();
     }
 
     @Autowired
