@@ -5,7 +5,7 @@ set -x
 if [ ! -d $OPENSHIFT_DATA_DIR/m2/repository ]
         then
                 cd $OPENSHIFT_DATA_DIR
-				mkdir m2/repository                
+				mkdir m2/repository
 fi
 
 if [ ! -d $OPENSHIFT_DATA_DIR/logs ]
@@ -25,7 +25,7 @@ fi
 if [ ! -d $OPENSHIFT_DATA_DIR/apache-maven-3.2.3 ]
         then
                 cd $OPENSHIFT_DATA_DIR
-                wget http://mirror.cc.columbia.edu/pub/software/apache/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz
+                wget https://archive.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz
                 tar xvf *.tar.gz
                 rm -f *.tar.gz
 fi
