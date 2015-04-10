@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-</head>
-<body>
-<div th:fragment="content">
-    Current Events
-</div>
-</body>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+    <head>
+    </head>
+    <body>
+    <div layout:fragment="content">
+        Current Events
+    </div>
+    </body>
 </html>
