@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         String channel = "REQUIRES_INSECURE_CHANNEL";
-        if (env.acceptsProfiles("cloud", "openshift")) {
+        if (env.acceptsProfiles("openshift")) {
             channel = "REQUIRES_SECURE_CHANNEL";
         }
 
