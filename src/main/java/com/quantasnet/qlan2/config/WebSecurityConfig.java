@@ -27,7 +27,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
             .authorizeRequests()
-                .antMatchers("/trace", "/autoconfig", "/metrics**", "/shutdown", "/beans", "/mappings", "/health", "/dump", "/env**", "/configprops").hasRole("SUPERUSER")
                 .anyRequest().permitAll()
             .and()
                 .formLogin()
