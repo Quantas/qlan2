@@ -17,7 +17,7 @@ import java.util.Set;
  * Created by andrewlandsverk on 4/9/15.
  */
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User implements UserDetails, CredentialsContainer, Serializable {
     private static final long serialVersionUID = 5923607403864940973L;
 
