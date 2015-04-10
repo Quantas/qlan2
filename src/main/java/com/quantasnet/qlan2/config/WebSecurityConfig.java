@@ -35,9 +35,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
             .and()
                 .logout()
-                .permitAll()
-            .and()
-                .requiresChannel().anyRequest().requires(channel);
+                .permitAll();
+            //.and()
+            //    .requiresChannel().anyRequest().requires(channel);
     }
 
     @Autowired
