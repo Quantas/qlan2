@@ -17,7 +17,7 @@ public class HomeController {
 
     @RequestMapping("/")
     public String home(HttpServletRequest request) {
-        LOG.info("Secure=", request.isSecure());
+        LOG.info("Secure={}", request.isSecure());
         return "home";
     }
 }
