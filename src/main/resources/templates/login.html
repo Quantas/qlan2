@@ -4,21 +4,41 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layouts/default">
 <head>
-    <title>Spring Security Example </title>
 </head>
 <body>
 <div layout:fragment="content">
-<div th:if="${param.error}">
-    Invalid username and password.
-</div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
-<form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
+    <div class="container" style="width: 600px">
+        <div th:if="${param.error}" class="alert alert-dismissable alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            Invalid username or password.
+        </div>
+        <div th:if="${param.logout}" class="alert alert-dismissable alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            You have been logged out.
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">Sign In</h1>
+            </div>
+            <div class="panel-body">
+                <form th:action="@{/login}" method="post" class="form">
+                    <table class="table">
+                        <tr>
+                            <th>User Name</th>
+                            <td><input name="username" type="text" class="form-control imput-md" placeholder="User Name" /></td>
+                        </tr>
+                        <tr>
+                            <th>Password</th>
+                            <td><input name="password" type="password" class="form-control imput-md" placeholder="Password" /></td>
+                        </tr>
+                    </table>
+                    <div class="container" style="width: 300px;">
+                        <button id="submit" type="submit" name="submit" class="btn btn-lg btn-primary btn-block">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

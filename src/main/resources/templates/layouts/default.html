@@ -1,18 +1,47 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     <head>
         <title>QLAN 2.0</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <script type="text/javascript" th:src="@{/webjars/jquery/2.1.3/jquery.min.js}"></script>
+        <script type="text/javascript" th:src="@{/webjars/bootstrap/3.3.1/js/bootstrap.min.js}"></script>
+
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.1/css/bootstrap.min.css}" />
+        <link rel="stylesheet" th:href="@{/webjars/font-awesome/4.2.0/css/font-awesome.min.css}" />
+        <style>
+            body {
+                padding-top: 40px;
+            }
+        </style>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#logoutLink').on("click", function(e) {
+                    e.preventDefault();
+                    $('#logoutForm').submit();
+                });
+            });
+        </script>
     </head>
     <body>
-        <div layout:include="fragments/header :: header">
-            Header
-        </div>
-        <div layout:fragment="content">
-            Content
-        </div>
-        <div layout:include="fragments/footer :: footer">
-            Footer
+        <div class="container">
+            <div id="top">
+                <div layout:include="fragments/header :: header">
+                    Header
+                </div>
+            </div>
+            <br />
+            <div id="middle" style="margin-bottom: 30px">
+                <div layout:fragment="content">
+                    Content
+                </div>
+            </div>
+            <div id="bottom">
+                <div layout:include="fragments/footer :: footer">
+                    Footer
+                </div>
+            </div>
         </div>
     </body>
 </html>
