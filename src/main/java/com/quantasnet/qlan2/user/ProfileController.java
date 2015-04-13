@@ -57,10 +57,12 @@ public class ProfileController {
 
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST)
     public String changePassword(@AuthenticationPrincipal final User user, @Valid @ModelAttribute final ChangePasswordForm changePasswordForm, final BindingResult bindingResult) {
-        final boolean success = userService.changePassword(user, changePasswordForm);
 
-        if (!success && !bindingResult.hasErrors()) {
-            bindingResult.addError(new FieldError(CHANGE_PASSWORD, "newPassword", "The password change failed"));
+        if (!bindingResult.hasErrors()) {
+            final boolean success = userService.changePassword(user, changePasswordForm);
+            if (!success) {
+                bindingResult.addError(new FieldError(CHANGE_PASSWORD, "newPassword", "The password change failed"));
+            }
         }
 
         if (bindingResult.hasErrors()) {
