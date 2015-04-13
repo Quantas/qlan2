@@ -8,132 +8,134 @@
     </head>
     <body>
         <div layout:fragment="content">
-        <form th:object="${profileUser}" method="post" th:action="@{/profile/save}" class="form-signin" role="form">
-            <div class="container" style="width: 600px">
-                <h2 class="form-signin-heading">QLAN Profile</h2>
-                <div style="color: red">
-                    TODO Errors
+            <div class="row">
+                <div class="col-md-6">
+                    <form th:object="${profileUser}" method="post" th:action="@{/profile/save}" class="form-signin" role="form">
+                        <div>
+                            <h2 class="form-signin-heading">Profile</h2>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                            </div>
+                            <table class="table">
+                                <tr>
+                                    <th>
+                                        User Name
+                                    </th>
+                                    <td th:text="${#authentication.principal.userName}">
+                                        User Name
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Profile Image
+                                    </th>
+                                    <td>
+                                        <img th:src="${#authentication.principal.imageUrl}" width="50" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Steam
+                                    </th>
+                                    <td>
+                                        <i class="fa fa-check fa-fw" th:if="${#authentication.principal.steam}"></i>
+                                        <i class="fa fa-ban fa-fw" th:if="${!#authentication.principal.steam}"></i>
+                                    </td>
+                                </tr>
+                                <div th:if="${#authentication.principal.steam}">
+                                    <tr>
+                                        <th>
+                                            Steam ID
+                                        </th>
+                                        <td th:text="${#authentication.principal.steamId}">
+                                            Steam ID
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Steam Online
+                                        </th>
+                                        <td>
+                                            <i class="fa fa-check fa-fw" th:if="${#authentication.principal.steamOnline}"></i>
+                                            <i class="fa fa-ban fa-fw" th:if="${!#authentication.principal.steamOnline}"></i>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Current Game
+                                        </th>
+                                        <td th:text="${#authentication.principal.steamGame}">
+                                            Current Game
+                                        </td>
+                                    </tr>
+                                </div>
+                                <tr>
+                                    <th>
+                                        First Name
+                                    </th>
+                                    <td>
+                                        <input id="firstName" th:field="*{firstName}" class="form-control input-md" placeholder="First Name" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        Last Name
+                                    </th>
+                                    <td>
+                                        <input id="lastName" th:field="*{lastName}" class="form-control input-md" placeholder="Last Name" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        E-Mail
+                                    </th>
+                                    <td>
+                                        <input id="email" th:field="*{email}" class="form-control input-md" placeholder="E-Mail" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <button id="submit" type="submit" name="submit" class="btn btn-lg btn-primary btn-block">Update</button>
+                    </form>
                 </div>
-                <table class="table">
-                    <tr>
-                        <th>
-                            User Name
-                        </th>
-                        <td th:text="${profileUser.userName}">
-                            User Name
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Profile Image
-                        </th>
-                        <td>
-                            <img th:src="${profileUser.imageUrl}" width="50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Steam
-                        </th>
-                        <td>
-                            <i class="fa fa-check fa-fw" th:if="${profileUser.steam}"></i>
-                            <i class="fa fa-ban fa-fw" th:if="${!profileUser.steam}"></i>
-                        </td>
-                    </tr>
-                    <div th:if="${profileUser.steam}">
-                        <tr>
-                            <th>
-                                Steam ID
-                            </th>
-                            <td th:text="${profileUser.steamId}">
-                                Steam ID
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Steam Online
-                            </th>
-                            <td>
-                                <i class="fa fa-check fa-fw" th:if="${profileUser.steamOnline}"></i>
-                                <i class="fa fa-ban fa-fw" th:if="${!profileUser.steamOnline}"></i>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Current Game
-                            </th>
-                            <td th:text="${profileUser.steamGame}">
-                                Current Game
-                            </td>
-                        </tr>
-                    </div>
-                    <tr>
-                        <th>
-                            First Name
-                        </th>
-                        <td>
-                            <input id="firstName" th:field="*{firstName}" class="form-control input-md" placeholder="First Name" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            Last Name
-                        </th>
-                        <td>
-                            <input id="lastName" th:field="*{lastName}" class="form-control input-md" placeholder="Last Name" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            E-Mail
-                        </th>
-                        <td>
-                            <input id="email" th:field="*{email}" class="form-control input-md" placeholder="E-Mail" />
-                        </td>
-                    </tr>
-                </table>
+                <div class="col-md-6">
+                    <form th:object="${changePasswordForm}" method="post" th:action="@{/profile/changePassword}" class="form-signin" role="form">
+                        <div>
+                            <h2 class="form-signin-heading">Change Password</h2>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                            </div>
+                            <table class="table">
+                                <tr>
+                                    <th>
+                                        Current Password
+                                    </th>
+                                    <td>
+                                        <input id="currentPassword" type="password" th:field="*{currentPassword}" class="form-control input-md" placeholder="Current Password" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        New Password
+                                    </th>
+                                    <td>
+                                        <input id="newPassword" type="password" th:field="*{newPassword}" class="form-control input-md" placeholder="New Password" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        New Password Again
+                                    </th>
+                                    <td>
+                                        <input id="newPasswordAgain" type="password" th:field="*{newPasswordAgain}" class="form-control input-md" placeholder="New Password Again" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <button id="submit" type="submit" name="submit" class="btn btn-lg btn-primary btn-block">Update</button>
+                    </form>
+                </div>
             </div>
-            <div class="container" style="width: 200px">
-                <button id="submit" type="submit" name="submit" class="btn btn-lg btn-primary btn-block">Update</button>
-            </div>
-        </form>
-            <form th:object="${changePasswordForm}" method="post" th:action="@{/profile/changePassword}" class="form-signin" role="form">
-                <div class="container" style="width: 600px">
-                    <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
-                        <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
-                    </div>
-                    <h2 class="form-signin-heading">Change Password</h2>
-                    <table class="table">
-                        <tr>
-                            <th>
-                                Current Password
-                            </th>
-                            <td>
-                                <input id="currentPassword" type="password" th:field="*{currentPassword}" class="form-control input-md" placeholder="Current Password" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                New Password
-                            </th>
-                            <td>
-                                <input id="newPassword" type="password" th:field="*{newPassword}" class="form-control input-md" placeholder="New Password" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                New Password Again
-                            </th>
-                            <td>
-                                <input id="newPasswordAgain" type="password" th:field="*{newPasswordAgain}" class="form-control input-md" placeholder="New Password Again" />
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="container" style="width: 200px">
-                    <button id="submit" type="submit" name="submit" class="btn btn-lg btn-primary btn-block">Update</button>
-                </div>
-            </form>
-    </div>
-</body>
+        </div>
+    </body>
 </html>

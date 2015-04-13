@@ -81,8 +81,8 @@ public class UserService {
     }
 
     @Transactional
-    public User profileUpdate(final User profileUser) {
-        final User dbUser = userRepository.findOne(profileUser.getId());
+    public User profileUpdate(final User authUser, final User profileUser) {
+        final User dbUser = userRepository.findOne(authUser.getId());
         dbUser.setFirstName(profileUser.getFirstName());
         dbUser.setLastName(profileUser.getLastName());
         dbUser.setEmail(profileUser.getEmail());
