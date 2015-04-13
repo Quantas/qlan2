@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+    <head>
+        <title>Profile</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+        <form th:object="${profileUser}" method="post" th:action="@{/profile/save}" class="form-signin" role="form">
+            <div class="container" style="width: 600px">
+                <h2 class="form-signin-heading">QLAN Profile</h2>
+                <div style="color: red">
+                    TODO Errors
+                </div>
+                <table class="table">
+                    <tr>
+                        <th>
+                            User Name
+                        </th>
+                        <td th:text="${profileUser.userName}">
+                            User Name
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Profile Image
+                        </th>
+                        <td>
+                            <img th:src="${profileUser.imageUrl}" width="50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Steam
+                        </th>
+                        <td>
+                            <i class="fa fa-check fa-fw" th:if="${profileUser.steam}"></i>
+                            <i class="fa fa-ban fa-fw" th:if="${!profileUser.steam}"></i>
+                        </td>
+                    </tr>
+                    <div th:if="${profileUser.steam}">
+                        <tr>
+                            <th>
+                                Steam ID
+                            </th>
+                            <td th:text="${profileUser.steamId}">
+                                Steam ID
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Steam Online
+                            </th>
+                            <td>
+                                <i class="fa fa-check fa-fw" th:if="${profileUser.steamOnline}"></i>
+                                <i class="fa fa-ban fa-fw" th:if="${!profileUser.steamOnline}"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Current Game
+                            </th>
+                            <td th:text="${profileUser.steamGame}">
+                                Current Game
+                            </td>
+                        </tr>
+                    </div>
+                    <tr>
+                        <th>
+                            First Name
+                        </th>
+                        <td>
+                            <input id="firstName" th:field="*{firstName}" class="form-control input-md" placeholder="First Name" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Last Name
+                        </th>
+                        <td>
+                            <input id="lastName" th:field="*{lastName}" class="form-control input-md" placeholder="Last Name" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            E-Mail
+                        </th>
+                        <td>
+                            <input id="email" th:field="*{email}" class="form-control input-md" placeholder="E-Mail" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="container" style="width: 200px">
+                <button id="submit" type="submit" name="submit" class="btn btn-lg btn-primary btn-block">Update</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

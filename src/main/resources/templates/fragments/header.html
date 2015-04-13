@@ -38,27 +38,18 @@
                             <li>
                                 <a href="${adminHomeUrl}"><i class="fa fa-home fa-fw"></i>&nbsp;&nbsp;Home</a>
                             </li>
-                            <li>
-                                <a href="${adminSystemUrl}"><i class="fa fa-gears fa-fw"></i>&nbsp;&nbsp;System</a>
-                            </li>
-                            <li>
-                                <a href="${adminUsersUrl}"><i class="fa fa-users fa-fw"></i>&nbsp;&nbsp;Users</a>
-                            </li>
-                            <li>
-                                <a href="${adminFeaturesUrl}"><i class="fa fa-plug fa-fw"></i>&nbsp;&nbsp;Features</a>
-                            </li>
-                            <li>
-                                <a href="${adminMetricsUrl}" target="_blank"><i class="fa fa-line-chart fa-fw"></i>&nbsp;&nbsp;Metrics</a>
-                            </li>
                         </ul>
                     </li>
                     <li class="dropdown" sec:authorize="isAuthenticated()">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="${profile.imageUrl}" width="20" />
-                            &nbsp;&nbsp;<span sec:authentication="name">User</span>
+                            <img th:src="${#authentication.principal.imageUrl}" width="20" />
+                            &nbsp;&nbsp;<span th:text="${#authentication.principal.firstName + ' ' + #authentication.principal.lastName}">User</span>
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
+                            <li>
+                                <a id="profile" th:href="@{/profile}"><i class="fa fa-user fa-fw"></i>&nbsp;&nbsp;Profile</a>
+                            </li>
                             <li>
                                 <a id="logoutLink" href="#"><i class="fa fa-sign-out fa-fw"></i>&nbsp;&nbsp;Logout</a>
                             </li>
