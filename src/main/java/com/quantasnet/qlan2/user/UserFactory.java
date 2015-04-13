@@ -102,6 +102,6 @@ public class UserFactory {
     }
 
     public String generateGravatarUrl(final String email) {
-        return "http://www.gravatar.com/avatar/" + DigestUtils.md5Hex(email.trim().toLowerCase()) + "?d=identicon";
+        return "//www.gravatar.com/avatar/" + DigestUtils.md5Hex(email.trim().toLowerCase()) + "?d=identicon";
     }
 }
