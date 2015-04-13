@@ -19,6 +19,9 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails, CredentialsContainer, Serializable {
+
+    public static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=\\S+$).{8,}$";
+
     private static final long serialVersionUID = 5923607403864940973L;
 
     @Id
@@ -32,7 +35,7 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
 
     @NotEmpty(message = "Password is required.")
     @Size(min = 8, max = 255, message = "Password must be at least 8 characters.")
-    @Pattern(regexp = "^(?=.*[0-9])(?=\\S+$).{8,}$", message = "Password must be at least 8 characters and contain a number.")
+    @Pattern(regexp = PASSWORD_REGEX, message = "Password must be at least 8 characters and contain a number.")
     @Column(name = "user_password", nullable = true, length = 255)
     private String password;
 

@@ -1,9 +1,11 @@
 package com.quantasnet.qlan2.user;
 
 import com.quantasnet.qlan2.steam.SteamProfile;
+import com.quantasnet.qlan2.user.model.ChangePasswordForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,9 @@ public class UserService {
 
     @Autowired
     private UserFactory userFactory;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -107,9 +112,17 @@ public class UserService {
     }
 
     @Transactional
-    public void changePassword(final User user, final String password) {
-        final User saveUser = userFactory.changePassword(user, password);
-        userRepository.save(saveUser);
+    public boolean changePassword(final User user, final ChangePasswordForm changePasswordForm) {
+        final User dbUser = userRepository.getUserByUserName(user.getUserName());
+        if (passwordEncoder.matches(changePasswordForm.getCurrentPassword(), dbUser.getPassword())) {
+            if (changePasswordForm.getNewPassword().equals(changePasswordForm.getNewPasswordAgain())) {
+                final User saveUser = userFactory.changePassword(user, changePasswordForm.getNewPassword());
+                userRepository.save(saveUser);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Transactional
