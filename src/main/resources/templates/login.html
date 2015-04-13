@@ -7,7 +7,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="container" style="width: 600px">
+    <div class="center-block" style="max-width: 400px">
         <div th:if="${param.error}" class="alert alert-dismissable alert-danger">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             Invalid username or password.
@@ -32,9 +32,7 @@
                             <td><input name="password" type="password" class="form-control imput-md" placeholder="Password" /></td>
                         </tr>
                     </table>
-                    <div class="container" style="width: 300px;">
-                        <button id="submit" type="submit" name="submit" class="btn btn-lg btn-primary btn-block">Submit</button>
-                    </div>
+                    <button id="submit" type="submit" name="submit" class="btn btn-lg btn-primary btn-block">Submit</button>
                 </form>
             </div>
         </div>
