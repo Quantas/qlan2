@@ -86,7 +86,9 @@ public class UserService {
         dbUser.setFirstName(profileUser.getFirstName());
         dbUser.setLastName(profileUser.getLastName());
         dbUser.setEmail(profileUser.getEmail());
-        dbUser.setImageUrl(userFactory.generateGravatarUrl(dbUser.getEmail()));
+        if (!dbUser.isSteam()) {
+            dbUser.setImageUrl(userFactory.generateGravatarUrl(dbUser.getEmail()));
+        }
         final User newUser = userRepository.save(dbUser);
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(newUser, newUser.getPassword(), newUser.getAuthorities()));
         return newUser;
