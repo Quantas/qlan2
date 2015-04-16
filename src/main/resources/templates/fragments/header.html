@@ -36,7 +36,10 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="${adminHomeUrl}"><i class="fa fa-home fa-fw"></i>&nbsp;&nbsp;Home</a>
+                                <a th:href="@{/admin}"><i class="fa fa-home fa-fw"></i>&nbsp;&nbsp;Home</a>
+                            </li>
+                            <li>
+                                <a th:href="@{/admin/users}"><i class="fa fa-users fa-fw"></i>&nbsp;&nbsp;Users</a>
                             </li>
                         </ul>
                     </li>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+<head>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h1>Users</h1>
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th class="center">ID</th>
+                <th class="left">Username</th>
+                <th class="left">First Name</th>
+                <th class="left">Last Name</th>
+                <th class="left">E-Mail</th>
+                <th class="center">Steam</th>
+                <th class="center">Active</th>
+                <th class="center">Admin</th>
+                <th class="center">&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td class="center" th:text="${user.id}">User ID</td>
+                    <td class="left" th:text="${user.userName}">jdoe</td>
+                    <td class="left" th:text="${user.firstName}">John</td>
+                    <td class="left" th:text="${user.lastName}">Doe</td>
+                    <td class="left" th:text="${user.email}">jdoe@gmail.com</td>
+                    <td class="center">
+                        <i th:if="${user.steam}" class="fa fa-check fa-fw"></i>
+                        <i th:if="${!user.steam}" class="fa fa-ban fa-fw"></i>
+                    </td>
+                    <td class="center">
+                        <i th:if="${user.active}" class="fa fa-check fa-fw"></i>
+                        <i th:if="${!user.active}" class="fa fa-ban fa-fw"></i>
+                    </td>
+                    <td class="center">
+                        <i th:if="${user.admin}" class="fa fa-check fa-fw"></i>
+                        <i th:if="${!user.admin}" class="fa fa-ban fa-fw"></i>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a class="btn btn-primary btn-sm" href="#"><i class="fa fa-user fa-fw"></i>&nbsp;Edit</a>
+                            <a class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                                <span class="fa fa-caret-down"></span></a>
+                            <ul class="dropdown-menu">
+                                <li th:if="${user.active}"><a th:href="@{/admin/users/deactivate/} + ${user.id}"><i class="fa fa-ban fa-fw"></i> Deactivate</a></li>
+                                <li th:if="${!user.active}"><a th:href="@{/admin/users/activate/} + ${user.id}"><i class="fa fa-check fa-fw"></i> Activate</a></li>
+                                <li><a th:href="@{/admin/users/delete/} + ${user.id}"><i class="fa fa-trash-o fa-fw"></i> Delete</a></li>
+                                <li th:if="${user.admin}"><a th:href="@{/admin/users/revokeadmin/} + ${user.id}">Revoke Admin</a></li>
+                                <li th:if="${!user.admin}"><a th:href="@{/admin/users/makeadmin/} + ${user.id}">Make Admin</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

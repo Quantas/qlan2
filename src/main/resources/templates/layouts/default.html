@@ -35,6 +35,14 @@
             </div>
             <br />
             <div id="middle" style="margin-bottom: 30px">
+                    <div th:if="${successStatus != null}" class="alert alert-dismissable alert-success">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <span th:text="${successStatus}">Success!</span>
+                    </div>
+                    <div th:if="${failureStatus != null}" class="alert alert-dismissable alert-danger">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <span th:text="${failureStatus}">Failure!</span>
+                    </div>
                 <div layout:fragment="content">
                     Content
                 </div>
