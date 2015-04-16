@@ -11,9 +11,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -35,6 +37,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private PersistentTokenRepository qlanPersistentTokenRepository;
 
+    @Autowired
+    private AuthenticationUserDetailsService<OpenIDAuthenticationToken> steamUserDetailsService;
+
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         String channel = "REQUIRES_INSECURE_CHANNEL";
@@ -50,6 +55,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()
+            .and()
+                .openidLogin()
+                .loginPage("/login")
+                .permitAll()
+                .authenticationUserDetailsService(steamUserDetailsService)
             .and()
                 .logout()
                 .permitAll()

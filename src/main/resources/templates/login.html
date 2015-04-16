@@ -16,6 +16,20 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             You have been logged out.
         </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">Sign In With Steam</h1>
+            </div>
+            <div class="panel-body" style="text-align: center">
+                <form th:action="@{/login/openid}" method="post" target="_top">
+                    <input id="openid_identifier" name="openid_identifier" maxlength="100" type="hidden" value="http://steamcommunity.com/openid" />
+                    <input type='checkbox' name="_qlan2_remember_me" checked="checked" style="visibility: hidden" />
+                    <input type="image" src="http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_large_border.png" />
+                </form>
+            </div>
+        </div>
+
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h1 class="panel-title">Sign In</h1>
