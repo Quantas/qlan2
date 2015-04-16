@@ -25,7 +25,7 @@
                 <form th:action="@{/login/openid}" method="post" target="_top">
                     <input id="openid_identifier" name="openid_identifier" maxlength="100" type="hidden" value="http://steamcommunity.com/openid" />
                     <input type='checkbox' name="_qlan2_remember_me" checked="checked" style="visibility: hidden" />
-                    <input type="image" src="http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_large_border.png" />
+                    <input type="image" th:src="@{/images/sits_large_border.png}" />
                 </form>
             </div>
         </div>
