@@ -1,7 +1,6 @@
 package com.quantasnet.qlan2.config;
 
 import com.quantasnet.qlan2.security.QlanUserDetailsService;
-import com.quantasnet.qlan2.security.rememberme.QlanPersistentTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
