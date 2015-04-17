@@ -1,5 +1,6 @@
 package com.quantasnet.qlan2.steam;
 
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -51,57 +50,44 @@ public class SteamAPI {
         try {
             final URL url = new URL(URL_PREFIX + steamApiKey + "&steamids=" + id);
             final URLConnection urlc = url.openConnection();
-            final BufferedReader bfr = new BufferedReader(new InputStreamReader(urlc.getInputStream()));
+            final String responseJson = IOUtils.toString(urlc.getInputStream(), "UTF-8");
 
-            final StringBuilder builder = new StringBuilder(2048);
-            String line;
-            while ((line = bfr.readLine()) != null) {
-                builder.append(line);
-            }
-
-            final JSONObject wrapper = new JSONObject(builder.toString());
+            final JSONObject wrapper = new JSONObject(responseJson);
             final JSONObject response = wrapper.getJSONObject("response");
             final JSONArray players = response.getJSONArray("players");
             final JSONObject player = players.getJSONObject(0);
+
             if (null != player) {
                 final SteamProfile profile = new SteamProfile();
 
-                try {
-                    profile.setImageUrl(player.getString("avatarfull"));
-                } catch (JSONException e) {
-                    // bury it!
-                }
-
-                try {
-                    profile.setOnlineState(player.getInt("personastate"));
-                } catch (JSONException e) {
-                    // bury it
-                }
-
-                try {
-                    profile.setNickname(player.getString("personaname"));
-                } catch (JSONException e) {
-                    // bury it
-                }
-
-                try {
-                    profile.setRealName(player.getString("realname"));
-                } catch (JSONException e) {
-                    // bury it
-                }
-
-                try {
-                    profile.setGameName(player.getString("gameextrainfo"));
-                } catch (JSONException e) {
-                    // bury it
-                }
-
+                profile.setOnlineState(getIntValueFromJson(player, "personastate"));
+                profile.setImageUrl(getValueFromJson(player, "avatarfull"));
+                profile.setNickname(getValueFromJson(player, "personaname"));
+                profile.setRealName(getValueFromJson(player, "realname"));
+                profile.setGameName(getValueFromJson(player, "gameextrainfo"));
                 profile.setSteamId64(id);
+
                 return profile;
             }
         } catch(Exception e) {
-
+            // bury it
         }
         return null;
+    }
+
+    private String getValueFromJson(final JSONObject player, final String target) {
+        try {
+           return player.getString(target);
+        } catch(final JSONException e) {
+           return null;
+        }
+    }
+
+    private int getIntValueFromJson(final JSONObject player, final String target) {
+        try {
+            return player.getInt(target);
+        } catch(final JSONException e) {
+            return 0;
+        }
     }
 }

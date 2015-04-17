@@ -25,10 +25,6 @@ public class SteamUserDetailsService  implements AuthenticationUserDetailsServic
 
     @Override
     public UserDetails loadUserDetails(final OpenIDAuthenticationToken token) throws UsernameNotFoundException {
-        return load(token);
-    }
-
-    private User load(final OpenIDAuthenticationToken token) throws UsernameNotFoundException {
         final String url = token.getIdentityUrl();
         if (url.startsWith(STEAM_OPENID_URL)) {
             final long id = Long.parseLong(url.substring(url.lastIndexOf('/') + 1));
@@ -44,6 +40,7 @@ public class SteamUserDetailsService  implements AuthenticationUserDetailsServic
 
             return user;
         }
+
         throw new UsernameNotFoundException("Invalid OpenID Provider!");
     }
 }

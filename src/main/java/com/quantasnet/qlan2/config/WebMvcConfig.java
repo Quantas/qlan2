@@ -1,6 +1,5 @@
 package com.quantasnet.qlan2.config;
 
-import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.ErrorPage;
 import org.springframework.context.annotation.Bean;
@@ -26,16 +25,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public EmbeddedServletContainerCustomizer containerCustomizer() {
-        return new QlanCustomizer();
+        return container -> container.addErrorPages(
+                new ErrorPage(HttpStatus.NOT_FOUND, "/404"),
+                new ErrorPage(HttpStatus.FORBIDDEN, "/403"),
+                new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/503"));
     }
-
-    private static class QlanCustomizer implements EmbeddedServletContainerCustomizer {
-        @Override
-        public void customize(final ConfigurableEmbeddedServletContainer container) {
-            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/404"));
-            container.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, "/403"));
-            container.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/503"));
-        }
-    }
-
 }

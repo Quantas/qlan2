@@ -35,8 +35,7 @@ public class QlanPersistentTokenRepository implements PersistentTokenRepository 
     }
 
     @Override
-    public void updateToken(final String series, final String tokenValue,
-                            final Date lastUsed) {
+    public void updateToken(final String series, final String tokenValue, final Date lastUsed) {
         try {
             rememberMeTokenRepository.updateToken(tokenValue, lastUsed, series);
         } catch (final DataAccessException dae) {

@@ -76,12 +76,10 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
     private Set<Role> roles;
 
     public Long getId() {
-
         return id;
     }
 
     public void setId(final Long id) {
-
         this.id = id;
     }
 

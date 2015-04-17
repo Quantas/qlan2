@@ -18,11 +18,7 @@ public class QlanUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return load(username);
-    }
-
-    private User load(final String userId) throws UsernameNotFoundException, DataAccessException {
-        final User user = userRepository.getUserByUserName(userId);
+        final User user = userRepository.getUserByUserName(username);
 
         if (null == user) {
             throw new UsernameNotFoundException("The user does not exist");

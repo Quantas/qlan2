@@ -72,10 +72,10 @@ public class UserFactory {
         newUser.setSteamId(profile.getSteamId64());
         newUser.setImageUrl(profile.getImageUrl());
         newUser.setSteamGame(profile.getGameName());
-        newUser.setSteamOnline(profile.getOnlineState() == 0 ? false : true);
+        newUser.setSteamOnline(profile.getOnlineState() != 0);
         newUser.setEmail(profile.getSteamId64() + "@localhost.net");
         newUser.setSteam(true);
-        newUser.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
+        newUser.setPassword(encodePassword(UUID.randomUUID().toString()));
 
         addUserRole(newUser);
 
@@ -88,7 +88,7 @@ public class UserFactory {
     }
 
     public void addUserRole(final User user) {
-        final Set<Role> roles = new HashSet<Role>();
+        final Set<Role> roles = new HashSet<>();
         roles.add(roleService.findUserRole());
         user.setRoles(roles);
     }

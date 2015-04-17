@@ -37,8 +37,8 @@ public class DatabaseFillerListener implements ApplicationListener<ContextRefres
 
             if (roles.isEmpty()) {
                 // create roles
-                final Set<Role> rolesAll = new HashSet<Role>();
-                final Set<Role> rolesUser = new HashSet<Role>();
+                final Set<Role> rolesAll = new HashSet<>();
+                final Set<Role> rolesUser = new HashSet<>();
 
                 final Role user = roleService.save("ROLE_USER");
                 final Role admin = roleService.save("ROLE_ADMIN");
