@@ -99,7 +99,7 @@ public class UserAdminController {
             redirectAttributes.addFlashAttribute(ModelConstants.SUCCESS_STATUS, "User " + userId + " had Admin revoked.");
         } catch (DataAccessException dae) {
             redirectAttributes.addFlashAttribute(ModelConstants.FAILURE_STATUS, "User " + userId + " could not have Admin revoked.");
-            logger.error("Error making user an admin {}", userId, dae);
+            logger.error("Error revoking admin from {}", userId, dae);
         }
 
         return USERS_REDIRECT;
