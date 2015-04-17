@@ -51,6 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .antMatchers("/profile/**").authenticated()
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
             .and()
                 .formLogin()
@@ -75,8 +76,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(final AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(qlanUserDetailsService())
-                .passwordEncoder(passwordEncoder());
+            .userDetailsService(qlanUserDetailsService())
+            .passwordEncoder(passwordEncoder());
     }
 
     @Bean

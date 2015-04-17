@@ -27,10 +27,6 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
     public List<User> getAllSteamUsers() {
         return userRepository.findBySteam(Boolean.TRUE);
     }
@@ -70,8 +66,7 @@ public class UserService {
     public User save(final String userName, final String firstName,
                      final String lastName, final String email, final String password,
                      final Set<Role> roles) {
-        final User user = userFactory.make(userName, firstName, lastName,
-                email, password, roles);
+        final User user = userFactory.make(userName, firstName, lastName, email, password, roles);
         return userRepository.save(user);
     }
 
@@ -95,25 +90,6 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(final long id) {
-        userRepository.delete(id);
-    }
-
-    @Transactional
-    public void deactivateUser(final long id) {
-        final User user = userRepository.findOne(id);
-        user.setActive(false);
-        userRepository.save(user);
-    }
-
-    @Transactional
-    public void activateUser(final long id) {
-        final User user = userRepository.findOne(id);
-        user.setActive(true);
-        userRepository.save(user);
-    }
-
-    @Transactional
     public boolean changePassword(final User user, final ChangePasswordForm changePasswordForm) {
         final User dbUser = userRepository.getUserByUserName(user.getUserName());
         if (passwordEncoder.matches(changePasswordForm.getCurrentPassword(), dbUser.getPassword())) {
@@ -125,27 +101,5 @@ public class UserService {
         }
 
         return false;
-    }
-
-    @Transactional
-    public void makeAdmin(long id) {
-        final User user = userRepository.findOne(id);
-        userFactory.addAdminRole(user);
-        userRepository.save(user);
-    }
-
-    @Transactional
-    public void revokeAdmin(long id) {
-        final User user = userRepository.findOne(id);
-        Role toRemove = null;
-        for (final Role role : user.getRoles()) {
-            if (role.getRoleName().equals(Role.ADMIN)) {
-                toRemove = role;
-                break;
-            }
-        }
-
-        user.getRoles().remove(toRemove);
-        userRepository.save(user);
     }
 }
