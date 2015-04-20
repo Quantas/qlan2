@@ -1,4 +1,4 @@
-package com.quantasnet.qlan2.admin;
+package com.quantasnet.qlan2.admin.user;
 
 import com.quantasnet.qlan2.security.HasAdminRole;
 import com.quantasnet.qlan2.user.Role;
