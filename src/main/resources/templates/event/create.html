@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+<head>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="center-block" style="max-width: 400px">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">Create Event</h1>
+            </div>
+            <div class="panel-body">
+                <form th:object="${eventForm}" th:action="@{/event/create}" method="post" class="form">
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                        <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <th><label for="name">Event Name</label></th>
+                            <td><input id="name" name="name" th:field="*{name}" type="text" class="form-control imput-md" placeholder="Event Name" /></td>
+                        </tr>
+                        <tr>
+                            <th><label for="name">Start Date</label></th>
+                            <td><input id="start" name="start" th:field="*{start}" type="text" class="form-control imput-md" placeholder="Start Date" /></td>
+                        </tr>
+                        <tr>
+                            <th><label for="end">End Date</label></th>
+                            <td><input id="end" name="end" th:field="*{end}" type="text" class="form-control imput-md" placeholder="End Date" /></td>
+                        </tr>
+                    </table>
+                    <button id="submit" type="submit" name="submit" class="btn btn-lg btn-primary btn-block">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

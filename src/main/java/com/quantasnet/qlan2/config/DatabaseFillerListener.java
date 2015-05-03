@@ -1,8 +1,12 @@
 package com.quantasnet.qlan2.config;
 
+import com.quantasnet.qlan2.event.Event;
+import com.quantasnet.qlan2.event.EventService;
 import com.quantasnet.qlan2.user.Role;
 import com.quantasnet.qlan2.user.RoleService;
+import com.quantasnet.qlan2.user.User;
 import com.quantasnet.qlan2.user.UserService;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,9 @@ public class DatabaseFillerListener implements ApplicationListener<ContextRefres
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EventService eventService;
+
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent contextRefreshedEvent) {
         try {
@@ -49,8 +56,24 @@ public class DatabaseFillerListener implements ApplicationListener<ContextRefres
                 rolesUser.add(user);
 
                 // create users
-                userService.save("admin", "Admin", "Administrator", "admin@test.com", "admin", rolesAll);
-                userService.save("user", "User", "Userton", "user@test.com", "user", rolesUser);
+                final User adminUser = userService.save("admin", "Admin", "Administrator", "admin@test.com", "admin", rolesAll);
+                final User userUser = userService.save("user", "User", "Userton", "user@test.com", "user", rolesUser);
+
+                // create events
+                final Event event1 = new Event();
+                event1.setOwner(adminUser);
+                event1.setName("Admin Event");
+                event1.setStart(DateTime.now());
+                event1.setEnd(DateTime.now().plusDays(3));
+
+                final Event event2 = new Event();
+                event2.setOwner(userUser);
+                event2.setName("User Event");
+                event2.setStart(DateTime.now().plusDays(7));
+                event2.setEnd(DateTime.now().plusDays(10));
+
+                eventService.createEvent(event1);
+                eventService.createEvent(event2);
             } else {
                 log.info("DB already populated");
             }
