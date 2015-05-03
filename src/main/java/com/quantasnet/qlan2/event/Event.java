@@ -24,11 +24,11 @@ public class Event implements Serializable {
     private String name;
 
     @NotNull(message = "Start date is required.")
-    @Column(name = "start", nullable = false)
+    @Column(name = "start_date", nullable = false)
     private DateTime start;
 
     @NotNull(message = "End date is required.")
-    @Column(name = "end", nullable = false)
+    @Column(name = "end_date", nullable = false)
     private DateTime end;
 
     @ManyToOne
