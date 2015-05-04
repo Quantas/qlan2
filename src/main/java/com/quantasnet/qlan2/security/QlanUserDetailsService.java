@@ -1,12 +1,12 @@
 package com.quantasnet.qlan2.security;
 
-import com.quantasnet.qlan2.user.User;
-import com.quantasnet.qlan2.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import com.quantasnet.qlan2.user.User;
+import com.quantasnet.qlan2.user.UserRepository;
 
 /**
  * Created by andrewlandsverk on 4/9/15.

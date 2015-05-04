@@ -5,4 +5,6 @@ package com.quantasnet.qlan2.admin.user.commands;
  */
 public class IllegalUserAdminCommandException extends RuntimeException {
 
+	private static final long serialVersionUID = 6688197153109229030L;
+
 }

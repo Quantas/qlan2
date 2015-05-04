@@ -15,7 +15,9 @@ import java.util.Set;
 @Entity
 public class Event implements Serializable {
 
-    @Id
+	private static final long serialVersionUID = -1470349927747123283L;
+
+	@Id
     @GeneratedValue
     private Long id;
 
