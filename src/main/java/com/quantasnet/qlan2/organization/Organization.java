@@ -94,6 +94,6 @@ public class Organization {
 	
 	@Override
 	public int hashCode() {
-		return id.intValue();
+		return null == id ? -1 : id.intValue();
 	}
 }
