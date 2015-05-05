@@ -69,8 +69,8 @@ public class SteamAPI {
 
                 return profile;
             }
-        } catch(Exception e) {
-            // bury it
+        } catch(final Exception e) {
+            LOG.error("Error retrieving Steam Profile", e);
         }
         return null;
     }
