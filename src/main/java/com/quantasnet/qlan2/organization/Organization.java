@@ -82,4 +82,18 @@ public class Organization {
 	public void setEvents(Set<Event> events) {
 		this.events = events;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj.getClass().isAssignableFrom(this.getClass())) {
+			return ((Organization) obj).getId().equals(this.id);
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return id.intValue();
+	}
 }

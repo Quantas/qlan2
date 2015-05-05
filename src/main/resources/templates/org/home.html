@@ -2,12 +2,45 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layouts/default">
+      layout:decorator="layouts/default"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
 </head>
 <body>
 <div layout:fragment="content">
-    <h1>My Organizations</h1>
+	<div sec:authorize="isAuthenticated()">
+	    <h1>My Organizations</h1>
+	    <table class="table table-striped table-hover">
+	        <thead>
+	        <tr>
+	            <th class="center">ID</th>
+	            <th class="left">Name</th>
+	            <th class="left">Desc</th>
+	            <th class="center">&nbsp;</th>
+	        </tr>
+	        </thead>
+	        <tbody>
+	        <tr th:each="org : ${orgs}">
+	            <td class="center" th:text="${org.id}">ID</td>
+	            <td class="left"><a th:href="@{/org/} + ${org.id}" th:text="${org.name}">Name</a></td>
+	            <td class="left" th:text="${org.description}">Desc</td>
+	            <td>
+	                <div class="btn-group">
+	                    <a class="btn btn-primary btn-sm" href="#"><i class="fa fa-user fa-fw"></i>&nbsp;Edit</a>
+	                    <a class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+	                        <span class="fa fa-caret-down"></span></a>
+	                    <ul class="dropdown-menu">
+	                    	<li><a th:href="@{/event/new/} + ${org.id}">Create Event</a></li>
+	                        <li><a href="#"><i class="fa fa-trash-o fa-fw"></i> Delete</a></li>
+	                    </ul>
+	                </div>
+	            </td>
+	        </tr>
+	        </tbody>
+	    </table>
+	    <br />
+    </div>
+    <h1>All Organizations</h1>
     <table class="table table-striped table-hover">
         <thead>
         <tr>
@@ -18,24 +51,17 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="org : ${orgs}">
+        <tr th:each="org : ${allOrgs}">
             <td class="center" th:text="${org.id}">ID</td>
             <td class="left"><a th:href="@{/org/} + ${org.id}" th:text="${org.name}">Name</a></td>
             <td class="left" th:text="${org.description}">Desc</td>
             <td>
-                <div class="btn-group">
-                    <a class="btn btn-primary btn-sm" href="#"><i class="fa fa-user fa-fw"></i>&nbsp;Edit</a>
-                    <a class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
-                        <span class="fa fa-caret-down"></span></a>
-                    <ul class="dropdown-menu">
-                    	<li><a th:href="@{/event/new/} + ${org.id}">Create Event</a></li>
-                        <li><a href="#"><i class="fa fa-trash-o fa-fw"></i> Delete</a></li>
-                    </ul>
-                </div>
+				<a class="btn btn-primary btn-sm" th:href="@{/org/join/} + ${org.id}"><i class="fa fa-plus fa-fw"></i>&nbsp;Join</a>
             </td>
         </tr>
         </tbody>
     </table>
+    <a th:href="@{/org/new}" class="btn btn-primary btn-sm">Create Organization</a>
 </div>
 </body>
 </html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+<head>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="center-block" style="max-width: 400px">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">Create Organization</h1>
+            </div>
+            <div class="panel-body">
+                <form th:object="${orgForm}" th:action="@{/org/create/}" method="post" class="form">
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                        <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <th><label for="name">Organization Name</label></th>
+                            <td><input id="name" name="name" th:field="*{name}" type="text" class="form-control imput-md" placeholder="Organization Name" /></td>
+                        </tr>
+                        <tr>
+                            <th><label for="description">Description</label></th>
+                            <td><input id="description" name="description" th:field="*{description}" type="text" class="form-control imput-md" placeholder="Description" /></td>
+                        </tr>
+                        <tr>
+                            <th><label for="url">Public URL</label></th>
+                            <td><input id="url" name="url" th:field="*{url}" type="text" class="form-control imput-md" placeholder="Url" /></td>
+                        </tr>
+                    </table>
+                    <button id="submit" type="submit" name="submit" class="btn btn-lg btn-primary btn-block">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
