@@ -13,7 +13,7 @@
                 <h1 class="panel-title">Create Event</h1>
             </div>
             <div class="panel-body">
-                <form th:object="${eventForm}" th:action="@{/event/create}" method="post" class="form">
+                <form th:object="${eventForm}" th:action="@{/event/create/} + ${orgId}" method="post" class="form">
                     <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
                         <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
                     </div>

@@ -1,15 +1,20 @@
 package com.quantasnet.qlan2.admin.user;
 
+import java.util.Iterator;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.quantasnet.qlan2.organization.Organization;
+import com.quantasnet.qlan2.organization.OrganizationMember;
+import com.quantasnet.qlan2.organization.OrganizationService;
 import com.quantasnet.qlan2.security.HasAdminRole;
 import com.quantasnet.qlan2.user.Role;
 import com.quantasnet.qlan2.user.User;
 import com.quantasnet.qlan2.user.UserFactory;
 import com.quantasnet.qlan2.user.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Created by andrewlandsverk on 4/16/15.
@@ -21,6 +26,9 @@ public class UserAdminService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private OrganizationService organizationService;
 
     @Autowired
     private UserFactory userFactory;
@@ -30,7 +38,17 @@ public class UserAdminService {
     }
 
     public void deleteUser(final long id) {
-        userRepository.delete(id);
+    	final User user = userRepository.findOne(id);
+    	for (final Organization org : organizationService.getUsersOrgs(user)) {
+    		for (final Iterator<OrganizationMember> members = org.getMembers().iterator(); members.hasNext();) {
+    			if (members.next().getUser().getId().equals(id)) {
+    				members.remove();
+    				break;
+    			}
+    		}
+    		organizationService.save(org);
+    	}
+        userRepository.delete(user);
     }
 
     public void deactivateUser(final long id) {

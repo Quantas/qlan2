@@ -7,29 +7,28 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h1>All Events</h1>
+    <h1>My Organizations</h1>
     <table class="table table-striped table-hover">
         <thead>
         <tr>
             <th class="center">ID</th>
             <th class="left">Name</th>
-            <th class="left">Start</th>
-            <th class="left">End</th>
+            <th class="left">Desc</th>
             <th class="center">&nbsp;</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="event : ${events}">
-            <td class="center" th:text="${event.id}">ID</td>
-            <td class="left" th:text="${event.name}">Event</td>
-            <td class="left" th:text="${event.start}">Start</td>
-            <td class="left" th:text="${event.end}">End</td>
+        <tr th:each="org : ${orgs}">
+            <td class="center" th:text="${org.id}">ID</td>
+            <td class="left"><a th:href="@{/org/} + ${org.id}" th:text="${org.name}">Name</a></td>
+            <td class="left" th:text="${org.description}">Desc</td>
             <td>
                 <div class="btn-group">
                     <a class="btn btn-primary btn-sm" href="#"><i class="fa fa-user fa-fw"></i>&nbsp;Edit</a>
                     <a class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
                         <span class="fa fa-caret-down"></span></a>
                     <ul class="dropdown-menu">
+                    	<li><a th:href="@{/event/new/} + ${org.id}">Create Event</a></li>
                         <li><a href="#"><i class="fa fa-trash-o fa-fw"></i> Delete</a></li>
                     </ul>
                 </div>

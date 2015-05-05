@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+<head>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1 th:text="${org.name}">Org Name</h1>
+    <h4 th:text="${org.description}">Org Description</h4>
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th class="center">User Name</th>
+            <th class="left">Role</th>
+            <th class="left">Staff</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member : ${org.members}">
+            <td class="center" th:text="${member.user.userName}">User Name</td>
+            <td class="left" th:text="${member.role}">Role</td>
+            <td class="left" th:text="${member.staff}">Staff</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

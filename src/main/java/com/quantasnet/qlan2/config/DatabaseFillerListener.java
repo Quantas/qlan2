@@ -1,11 +1,9 @@
 package com.quantasnet.qlan2.config;
 
-import com.quantasnet.qlan2.event.Event;
-import com.quantasnet.qlan2.event.EventService;
-import com.quantasnet.qlan2.user.Role;
-import com.quantasnet.qlan2.user.RoleService;
-import com.quantasnet.qlan2.user.User;
-import com.quantasnet.qlan2.user.UserService;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +13,14 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.quantasnet.qlan2.event.Event;
+import com.quantasnet.qlan2.organization.Organization;
+import com.quantasnet.qlan2.organization.OrganizationMember;
+import com.quantasnet.qlan2.organization.OrganizationService;
+import com.quantasnet.qlan2.user.Role;
+import com.quantasnet.qlan2.user.RoleService;
+import com.quantasnet.qlan2.user.User;
+import com.quantasnet.qlan2.user.UserService;
 
 /**
  * Created by andrewlandsverk on 4/9/15.
@@ -35,7 +38,7 @@ public class DatabaseFillerListener implements ApplicationListener<ContextRefres
     private UserService userService;
 
     @Autowired
-    private EventService eventService;
+    private OrganizationService orgService;
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent contextRefreshedEvent) {
@@ -59,21 +62,47 @@ public class DatabaseFillerListener implements ApplicationListener<ContextRefres
                 final User adminUser = userService.save("admin", "Admin", "Administrator", "admin@test.com", "admin", rolesAll);
                 final User userUser = userService.save("user", "User", "Userton", "user@test.com", "user", rolesUser);
 
+                // create organization
+                final Organization org = new Organization();
+                org.setName("The QLANs");
+                org.setDescription("Just a test");
+                
+                final OrganizationMember adminMember = new OrganizationMember();
+                adminMember.setRole("Admin");
+                adminMember.setStaff(true);
+                adminMember.setUser(adminUser);
+                
+                final OrganizationMember userMember = new OrganizationMember();
+                userMember.setRole("User");
+                userMember.setStaff(false);
+                userMember.setUser(userUser);
+                
+                final Set<OrganizationMember> members = new HashSet<OrganizationMember>();
+                members.add(adminMember);
+                members.add(userMember);
+                
+                org.setMembers(members);
+                
+                final Set<Event> events = new HashSet<Event>();
+                
                 // create events
                 final Event event1 = new Event();
-                event1.setOwner(adminUser);
                 event1.setName("Admin Event");
                 event1.setStart(DateTime.now());
                 event1.setEnd(DateTime.now().plusDays(3));
-
+                
                 final Event event2 = new Event();
-                event2.setOwner(userUser);
                 event2.setName("User Event");
                 event2.setStart(DateTime.now().plusDays(7));
                 event2.setEnd(DateTime.now().plusDays(10));
 
-                eventService.createEvent(event1);
-                eventService.createEvent(event2);
+                events.add(event1);
+                events.add(event2);
+                
+                org.setEvents(events);
+                
+                orgService.save(org);
+                
             } else {
                 log.info("DB already populated");
             }

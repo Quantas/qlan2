@@ -1,13 +1,19 @@
 package com.quantasnet.qlan2.event;
 
-import com.quantasnet.qlan2.user.User;
+import java.io.Serializable;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.Set;
+import com.quantasnet.qlan2.user.User;
 
 /**
  * Created by andrewlandsverk on 4/9/15.
@@ -33,10 +39,7 @@ public class Event implements Serializable {
     @Column(name = "end_date", nullable = false)
     private DateTime end;
 
-    @ManyToOne
-    private User owner;
-
-    @ManyToMany(targetEntity = User.class, fetch = FetchType.EAGER)
+    @ManyToMany
     private Set<User> users;
 
     public Long getId() {
@@ -69,14 +72,6 @@ public class Event implements Serializable {
 
     public void setEnd(DateTime end) {
         this.end = end;
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(final User owner) {
-        this.owner = owner;
     }
 
     public Set<User> getUsers() {

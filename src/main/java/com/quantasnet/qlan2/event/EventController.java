@@ -2,12 +2,14 @@ package com.quantasnet.qlan2.event;
 
 import com.quantasnet.qlan2.security.HasUserRole;
 import com.quantasnet.qlan2.user.User;
+
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -33,30 +35,36 @@ public class EventController {
     }
 
     @HasUserRole
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String newEvent(final Model model) {
+    @RequestMapping(value = "/new/{orgId}", method = RequestMethod.GET)
+    public String newEvent(@PathVariable final Long orgId, final Model model) {
         if (!model.containsAttribute(EVENT_FORM)) {
             final Event event = new Event();
             event.setStart(DateTime.now().plusDays(7));
             event.setEnd(DateTime.now().plusDays(10));
             model.addAttribute(EVENT_FORM, event);
         }
+        model.addAttribute("orgId", orgId);
         return "event/create";
     }
 
     @HasUserRole
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String createEvent(@Valid final Event eventForm, final BindingResult bindingResult, final RedirectAttributes redirectAttributes,
+    @RequestMapping(value = "/create/{orgId}", method = RequestMethod.POST)
+    public String createEvent(@PathVariable final Long orgId, @Valid final Event eventForm, final BindingResult bindingResult, final RedirectAttributes redirectAttributes,
         @AuthenticationPrincipal final User user) {
 
+    	if (!bindingResult.hasErrors()) {
+    		final boolean success = eventService.createEvent(eventForm, orgId, user);
+    		if (!success) {
+    			bindingResult.reject("event.create.error", "There was an error creating the event. Please try again.");
+    		}
+    	}
+    	
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute(BindingResult.MODEL_KEY_PREFIX + EVENT_FORM, bindingResult);
             redirectAttributes.addFlashAttribute(EVENT_FORM, eventForm);
-            return "redirect:/event/new";
+            return "redirect:/event/new/" + orgId;
         }
-
-        eventForm.setOwner(user);
-        eventService.createEvent(eventForm);
+        
         return "redirect:/event/list";
     }
 
