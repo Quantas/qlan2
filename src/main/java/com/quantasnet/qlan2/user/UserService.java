@@ -2,7 +2,9 @@ package com.quantasnet.qlan2.user;
 
 import com.quantasnet.qlan2.steam.SteamProfile;
 import com.quantasnet.qlan2.user.model.ChangePasswordForm;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +26,7 @@ public class UserService {
     @Autowired
     private UserFactory userFactory;
 
+    @Lazy
     @Autowired
     private PasswordEncoder passwordEncoder;
 
