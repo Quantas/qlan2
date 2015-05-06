@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Created by andrewlandsverk on 4/9/15.
  */
-public interface EventRepository extends JpaRepository<Event, Long> {
+interface EventRepository extends JpaRepository<Event, Long> {
 
 }

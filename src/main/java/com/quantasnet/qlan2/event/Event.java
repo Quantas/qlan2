@@ -1,22 +1,14 @@
 package com.quantasnet.qlan2.event;
 
-import java.io.Serializable;
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-
+import com.quantasnet.qlan2.organization.Organization;
+import com.quantasnet.qlan2.user.User;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 
-import com.quantasnet.qlan2.organization.Organization;
-import com.quantasnet.qlan2.user.User;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Created by andrewlandsverk on 4/9/15.
@@ -45,7 +37,7 @@ public class Event implements Serializable {
     @ManyToMany
     private Set<User> users;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="org_id", nullable = false)
     private Organization org;
 

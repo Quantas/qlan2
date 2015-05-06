@@ -25,6 +25,24 @@
         </tr>
         </tbody>
     </table>
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th class="center">Event Name</th>
+            <th class="left">Start</th>
+            <th class="left">End</th>
+            <th class="left">Participants</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="event : ${org.events}">
+            <td class="center" th:text="${event.name}">Name</td>
+            <td class="left" th:text="${event.start}">Start</td>
+            <td class="left" th:text="${event.end}">End</td>
+            <td class="left" th:text="${#lists.size(event.users)}">1000</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>

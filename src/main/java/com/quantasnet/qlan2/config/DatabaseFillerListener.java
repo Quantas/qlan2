@@ -70,24 +70,10 @@ public class DatabaseFillerListener implements ApplicationListener<ContextRefres
                 final Organization org = new Organization();
                 org.setName("The QLANs");
                 org.setDescription("Just a test");
-                
-                final OrganizationMember adminMember = new OrganizationMember();
-                adminMember.setRole("Admin");
-                adminMember.setStaff(true);
-                adminMember.setUser(adminUser);
-                
-                final OrganizationMember userMember = new OrganizationMember();
-                userMember.setRole("User");
-                userMember.setStaff(false);
-                userMember.setUser(userUser);
-                
-                final Set<OrganizationMember> members = new HashSet<OrganizationMember>();
-                members.add(adminMember);
-                members.add(userMember);
-                
-                org.setMembers(members);
-                
-                orgService.save(org);
+
+                orgService.createOrganization(org, adminUser);
+
+                orgService.addOrgMember(org, userUser, false);
                 
                 // create events
                 final Event event1 = new Event();
@@ -95,20 +81,21 @@ public class DatabaseFillerListener implements ApplicationListener<ContextRefres
                 event1.setStart(DateTime.now());
                 event1.setEnd(DateTime.now().plusDays(3));
                 
-                eventService.createEvent(event1, org.getId(), adminUser);
+                eventService.createEvent(event1, org);
                 
                 final Event event2 = new Event();
                 event2.setName("User Event");
                 event2.setStart(DateTime.now().plusDays(7));
                 event2.setEnd(DateTime.now().plusDays(10));
                 
-                eventService.createEvent(event2, org.getId(), adminUser);
+                eventService.createEvent(event2, org);
                 
             } else {
                 log.info("DB already populated");
             }
         } catch(final Exception e) {
             log.error("Error filling the database", e);
+            throw e;
         }
     }
 }

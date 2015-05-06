@@ -23,9 +23,6 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
-    @Autowired
-    private OrganizationService orgService;
-    
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
     }
@@ -41,5 +38,10 @@ public class EventService {
     	}
     	
     	return false;
+    }
+
+    public void createEvent(final Event event, final Organization org) {
+        event.setOrg(org);
+        eventRepository.save(event);
     }
 }

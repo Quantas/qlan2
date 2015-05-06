@@ -51,7 +51,7 @@ public class OrganizationController {
 	
 	@HasUserRole
     @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String newEvent(final Model model) {
+    public String newOrg(final Model model) {
         if (!model.containsAttribute(ORG_FORM)) {
             model.addAttribute(ORG_FORM, new Organization());
         }
@@ -60,7 +60,7 @@ public class OrganizationController {
 
     @HasUserRole
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String createEvent(@Valid final Organization orgForm, final BindingResult bindingResult, final RedirectAttributes redirectAttributes,
+    public String createOrg(@Valid final Organization orgForm, final BindingResult bindingResult, final RedirectAttributes redirectAttributes,
         @AuthenticationPrincipal final User user) {
 
         if (bindingResult.hasErrors()) {
@@ -69,7 +69,7 @@ public class OrganizationController {
             return "redirect:/event/new";
         }
         
-        orgService.save(orgForm, user);
+        orgService.createOrganization(orgForm, user);
         return "redirect:/org";
     }
 	
