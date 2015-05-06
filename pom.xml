@@ -21,11 +21,12 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<start-class>com.quantasnet.qlan2.Qlan2Application</start-class>
+		
 		<java.version>1.8</java.version>
 
 		<!-- Dependency Versions -->
 		<org.postgresql.version>9.4-1201-jdbc41</org.postgresql.version>
-		<org.thymeleaf.extras.springsec.version>2.1.2.RELEASE</org.thymeleaf.extras.springsec.version>
+		
 		<org.webjars.bootstrap.version>3.3.1</org.webjars.bootstrap.version>
 		<org.webjars.fontawesome.version>4.2.0</org.webjars.fontawesome.version>
 		<org.webjars.jquery.version>2.1.3</org.webjars.jquery.version>
@@ -47,13 +48,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
-			<exclusions>
-				<!-- Using HikariCP Instead -->
-				<exclusion>
-					<groupId>org.apache.tomcat</groupId>
-					<artifactId>tomcat-jdbc</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -74,7 +68,6 @@
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity3</artifactId>
-			<version>${org.thymeleaf.extras.springsec.version}</version>
 		</dependency>
 
 		<dependency>
@@ -95,7 +88,6 @@
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.7</version>
 		</dependency>
 
 		<dependency>
