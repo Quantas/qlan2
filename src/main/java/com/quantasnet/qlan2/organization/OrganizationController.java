@@ -48,7 +48,21 @@ public class OrganizationController {
 		model.addAttribute("org", orgService.getOrgById(orgId));
 		return "org/single";
 	}
-	
+
+	@HasUserRole
+	@RequestMapping(value = "/join/{orgId}", method = RequestMethod.GET)
+	public String joinOrg(@PathVariable final Long orgId, @AuthenticationPrincipal final User user) {
+		orgService.addOrgMember(orgId, user);
+		return "redirect:/org/" + orgId;
+	}
+
+	@HasUserRole
+	@RequestMapping(value = "/leave/{orgId}", method = RequestMethod.GET)
+	public String leaveOrg(@PathVariable final Long orgId, @AuthenticationPrincipal final User user) {
+		orgService.removeOrgMember(orgId, user);
+		return "redirect:/org";
+	}
+
 	@HasUserRole
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newOrg(final Model model) {

@@ -49,6 +49,19 @@ public class OrganizationService {
 	}
 
 	@Transactional
+	public OrganizationMember addOrgMember(final Long orgId, final User user) {
+		final Organization org = organizationRepository.findOne(orgId);
+
+		for (final OrganizationMember member : org.getMembers()) {
+			if (member.getUser().getId().equals(user.getId())) {
+				return member;
+			}
+		}
+
+		return addOrgMember(org, user, false);
+	}
+
+	@Transactional
 	public OrganizationMember addOrgMember(final Organization org, final User user, final boolean staff) {
 		final OrganizationMember member = new OrganizationMember();
 		if (staff) {
@@ -64,6 +77,21 @@ public class OrganizationService {
 
 	@Transactional
 	public void removeOrgMember(final OrganizationMember member) {
-		orgMemberRepository.delete(member);
+		member.getOrg().getMembers().remove(member);
+		//organizationRepository.save(member.getOrg());
+	}
+
+	@Transactional
+	public void removeOrgMember(final Long orgId, final User user) {
+		for (final Organization org : getUsersOrgs(user)) {
+			if (org.getId().equals(orgId)) {
+				for (final OrganizationMember member : org.getMembers()) {
+					if (member.getUser().getId().equals(user.getId())) {
+						member.getOrg().getMembers().remove(member);
+						return;
+					}
+				}
+			}
+		}
 	}
 }

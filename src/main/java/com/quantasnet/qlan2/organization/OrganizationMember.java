@@ -20,8 +20,7 @@ public class OrganizationMember {
 	@Column(name = "staff")
 	private boolean staff;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "org_id", nullable = false)
+	@ManyToOne
 	private Organization org;
 
 	public Long getId() {
