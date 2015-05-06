@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.quantasnet.qlan2.event.Event;
+import com.quantasnet.qlan2.event.EventService;
 import com.quantasnet.qlan2.organization.Organization;
 import com.quantasnet.qlan2.organization.OrganizationMember;
 import com.quantasnet.qlan2.organization.OrganizationService;
@@ -39,6 +40,9 @@ public class DatabaseFillerListener implements ApplicationListener<ContextRefres
 
     @Autowired
     private OrganizationService orgService;
+    
+    @Autowired
+    private EventService eventService;
 
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent contextRefreshedEvent) {
@@ -83,7 +87,7 @@ public class DatabaseFillerListener implements ApplicationListener<ContextRefres
                 
                 org.setMembers(members);
                 
-                final Set<Event> events = new HashSet<Event>();
+                orgService.save(org);
                 
                 // create events
                 final Event event1 = new Event();
@@ -91,17 +95,14 @@ public class DatabaseFillerListener implements ApplicationListener<ContextRefres
                 event1.setStart(DateTime.now());
                 event1.setEnd(DateTime.now().plusDays(3));
                 
+                eventService.createEvent(event1, org.getId(), adminUser);
+                
                 final Event event2 = new Event();
                 event2.setName("User Event");
                 event2.setStart(DateTime.now().plusDays(7));
                 event2.setEnd(DateTime.now().plusDays(10));
-
-                events.add(event1);
-                events.add(event2);
                 
-                org.setEvents(events);
-                
-                orgService.save(org);
+                eventService.createEvent(event2, org.getId(), adminUser);
                 
             } else {
                 log.info("DB already populated");

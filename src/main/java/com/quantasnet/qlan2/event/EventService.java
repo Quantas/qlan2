@@ -35,8 +35,8 @@ public class EventService {
     	final Optional<Organization> org = gateKeeper.hasPermissionToDo(user, id, true);
     	
     	if (org.isPresent()) {
-    		org.get().getEvents().add(event);
-    		orgService.save(org.get());
+    		event.setOrg(org.get());
+    		eventRepository.save(event);
     		return true;
     	}
     	

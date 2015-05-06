@@ -7,12 +7,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 
+import com.quantasnet.qlan2.organization.Organization;
 import com.quantasnet.qlan2.user.User;
 
 /**
@@ -41,6 +44,10 @@ public class Event implements Serializable {
 
     @ManyToMany
     private Set<User> users;
+    
+    @ManyToOne
+    @JoinColumn(name="org_id", nullable = false)
+    private Organization org;
 
     public Long getId() {
         return id;
@@ -81,4 +88,12 @@ public class Event implements Serializable {
     public void setUsers(final Set<User> users) {
         this.users = users;
     }
+    
+    public Organization getOrg() {
+		return org;
+	}
+    
+    public void setOrg(Organization org) {
+		this.org = org;
+	}
 }

@@ -53,8 +53,7 @@ public class OrganizationController {
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newEvent(final Model model) {
         if (!model.containsAttribute(ORG_FORM)) {
-            final Organization org = new Organization();
-            model.addAttribute(ORG_FORM, org);
+            model.addAttribute(ORG_FORM, new Organization());
         }
         return "org/create";
     }
