@@ -1,14 +1,12 @@
 package com.quantasnet.qlan2.event;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.quantasnet.qlan2.organization.Organization;
 import com.quantasnet.qlan2.organization.OrganizationGateKeeper;
 import com.quantasnet.qlan2.user.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * Created by andrewlandsverk on 4/9/15.
@@ -21,10 +19,6 @@ public class EventService {
 	
     @Autowired
     private EventRepository eventRepository;
-
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
-    }
 
     public Optional<Event> getEvent(final Long eventId) {
         return Optional.ofNullable(eventRepository.findOne(eventId));
