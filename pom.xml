@@ -80,10 +80,16 @@
 			<artifactId>h2</artifactId>
 		</dependency>
 		<dependency>
+		    <groupId>org.mariadb.jdbc</groupId>
+		    <artifactId>mariadb-java-client</artifactId>
+		    <version>1.1.8</version>
+		</dependency>
+		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>${org.postgresql.version}</version>
 		</dependency>
+		
 
 		<dependency>
 			<groupId>joda-time</groupId>
