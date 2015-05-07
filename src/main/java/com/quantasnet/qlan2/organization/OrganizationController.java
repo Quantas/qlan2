@@ -1,10 +1,12 @@
 package com.quantasnet.qlan2.organization;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.quantasnet.qlan2.security.HasUserRole;
@@ -45,8 +48,20 @@ public class OrganizationController {
 	
 	@RequestMapping(value = "/{orgId}", method = RequestMethod.GET)
 	public String single(@PathVariable final Long orgId, final Model model) {
-		model.addAttribute("org", orgService.getOrgById(orgId));
-		return "org/single";
+		final Optional<Organization> org = orgService.getOrgById(orgId);
+
+		if (org.isPresent()) {
+			model.addAttribute("org", org.get());
+			return "org/single";
+		}
+
+		return "forward:/org/notFound";
+	}
+
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@RequestMapping(value = "/notFound")
+	public String notFound() {
+		return "org/notFound";
 	}
 
 	@HasUserRole

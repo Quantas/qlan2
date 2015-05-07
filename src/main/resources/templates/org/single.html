@@ -36,7 +36,7 @@
         </thead>
         <tbody>
         <tr th:each="event : ${org.events}">
-            <td class="center" th:text="${event.name}">Name</td>
+            <td class="center"><a th:href="@{/event/} + ${event.id}" th:text="${event.name}">Name</a></td>
             <td class="left" th:text="${event.start}">Start</td>
             <td class="left" th:text="${event.end}">End</td>
             <td class="left" th:text="${#lists.size(event.users)}">1000</td>

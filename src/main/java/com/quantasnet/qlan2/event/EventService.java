@@ -26,6 +26,10 @@ public class EventService {
         return eventRepository.findAll();
     }
 
+    public Optional<Event> getEvent(final Long eventId) {
+        return Optional.ofNullable(eventRepository.findOne(eventId));
+    }
+
     public boolean createEvent(final Event event, final Long id, final User user) {
     	
     	final Optional<Organization> org = gateKeeper.hasPermissionToDo(user, id, true);
@@ -44,28 +48,24 @@ public class EventService {
         eventRepository.save(event);
     }
 
-    public boolean joinEvent(final Long id, final User user) {
+    public Optional<Event> joinEvent(final Long id, final User user) {
         final Event event = eventRepository.findOne(id);
         if (null != event) {
             final Optional<Organization> org = gateKeeper.hasPermissionToDo(user, event.getOrg().getId(), false);
             if (org.isPresent()) {
                 event.getUsers().add(user);
                 eventRepository.save(event);
-                return true;
             }
         }
-
-        return false;
+        return Optional.ofNullable(event);
     }
 
-    public boolean leaveEvent(final Long id, final User user) {
+    public Optional<Event> leaveEvent(final Long id, final User user) {
         final Event event = eventRepository.findOne(id);
         if (null != event) {
             event.getUsers().remove(user);
             eventRepository.save(event);
-            return true;
         }
-
-        return false;
+        return Optional.ofNullable(event);
     }
 }

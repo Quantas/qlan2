@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,8 +34,8 @@ public class OrganizationService {
 		return organizationRepository.findAll();
 	}
 	
-	public Organization getOrgById(final Long id) {
-		return organizationRepository.findOne(id);
+	public Optional<Organization> getOrgById(final Long id) {
+		return Optional.ofNullable(organizationRepository.findOne(id));
 	}
 
 	@Transactional

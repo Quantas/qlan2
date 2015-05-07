@@ -5,6 +5,7 @@ import com.quantasnet.qlan2.user.User;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +13,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 /**
  * Created by andrewlandsverk on 4/8/15.
@@ -28,6 +31,23 @@ public class EventController {
     @Autowired
     private EventService eventService;
 
+    @RequestMapping(value = "/{eventId}", method = RequestMethod.GET)
+    public String event(@PathVariable final Long eventId, final Model model) {
+        final Optional<Event> event = eventService.getEvent(eventId);
+        if (event.isPresent()) {
+            model.addAttribute("event", event.get());
+            return "event/single";
+        }
+
+        return "forward:/event/notFound";
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @RequestMapping(value = "/notFound")
+    public String notFound() {
+        return "event/notFound";
+    }
+
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String eventList(final Model model) {
         model.addAttribute("events", eventService.getAllEvents());
@@ -38,14 +58,14 @@ public class EventController {
     @RequestMapping(value = "/join/{eventId}", method = RequestMethod.GET)
     public String joinEvent(@PathVariable final Long eventId, @AuthenticationPrincipal final User user) {
         eventService.joinEvent(eventId, user);
-        return "redirect:/org";
+        return "redirect:/event/" + eventId;
     }
 
     @HasUserRole
     @RequestMapping(value = "/leave/{eventId}", method = RequestMethod.GET)
     public String leaveEvent(@PathVariable final Long eventId, @AuthenticationPrincipal final User user) {
         eventService.leaveEvent(eventId, user);
-        return "redirect:/org";
+        return "redirect:/event/" + eventId;
     }
 
     @HasUserRole
