@@ -35,6 +35,20 @@ public class EventController {
     }
 
     @HasUserRole
+    @RequestMapping(value = "/join/{eventId}", method = RequestMethod.GET)
+    public String joinEvent(@PathVariable final Long eventId, @AuthenticationPrincipal final User user) {
+        eventService.joinEvent(eventId, user);
+        return "redirect:/org";
+    }
+
+    @HasUserRole
+    @RequestMapping(value = "/leave/{eventId}", method = RequestMethod.GET)
+    public String leaveEvent(@PathVariable final Long eventId, @AuthenticationPrincipal final User user) {
+        eventService.leaveEvent(eventId, user);
+        return "redirect:/org";
+    }
+
+    @HasUserRole
     @RequestMapping(value = "/new/{orgId}", method = RequestMethod.GET)
     public String newEvent(@PathVariable final Long orgId, final Model model) {
         if (!model.containsAttribute(EVENT_FORM)) {
@@ -65,7 +79,7 @@ public class EventController {
             return "redirect:/event/new/" + orgId;
         }
         
-        return "redirect:/event/list";
+        return "redirect:/org/" + orgId;
     }
 
 }

@@ -249,4 +249,18 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        return userName.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass().isAssignableFrom(this.getClass())) {
+            return ((User) obj).getUserName().equals(this.userName);
+        } else {
+            return false;
+        }
+    }
 }

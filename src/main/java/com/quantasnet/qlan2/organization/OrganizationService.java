@@ -78,7 +78,7 @@ public class OrganizationService {
 	@Transactional
 	public void removeOrgMember(final OrganizationMember member) {
 		member.getOrg().getMembers().remove(member);
-		//organizationRepository.save(member.getOrg());
+		removeUserFromOrgEvents(member);
 	}
 
 	@Transactional
@@ -88,10 +88,15 @@ public class OrganizationService {
 				for (final OrganizationMember member : org.getMembers()) {
 					if (member.getUser().getId().equals(user.getId())) {
 						member.getOrg().getMembers().remove(member);
+						removeUserFromOrgEvents(member);
 						return;
 					}
 				}
 			}
 		}
+	}
+
+	private void removeUserFromOrgEvents(final OrganizationMember member) {
+		member.getOrg().getEvents().forEach(event -> event.getUsers().remove(member.getUser()));
 	}
 }

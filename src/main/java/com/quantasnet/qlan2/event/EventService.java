@@ -43,4 +43,29 @@ public class EventService {
         event.setOrg(org);
         eventRepository.save(event);
     }
+
+    public boolean joinEvent(final Long id, final User user) {
+        final Event event = eventRepository.findOne(id);
+        if (null != event) {
+            final Optional<Organization> org = gateKeeper.hasPermissionToDo(user, event.getOrg().getId(), false);
+            if (org.isPresent()) {
+                event.getUsers().add(user);
+                eventRepository.save(event);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean leaveEvent(final Long id, final User user) {
+        final Event event = eventRepository.findOne(id);
+        if (null != event) {
+            event.getUsers().remove(user);
+            eventRepository.save(event);
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -35,6 +35,7 @@ public class Event implements Serializable {
     private DateTime end;
 
     @ManyToMany
+    @JoinColumn(name = "user_id", nullable = false)
     private Set<User> users;
     
     @ManyToOne(cascade = CascadeType.ALL)
