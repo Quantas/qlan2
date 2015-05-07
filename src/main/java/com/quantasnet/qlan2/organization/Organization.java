@@ -5,6 +5,7 @@ import com.quantasnet.qlan2.event.Event;
 import javax.persistence.*;
 import java.util.Set;
 
+@Cacheable
 @Entity
 public class Organization {
 

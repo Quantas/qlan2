@@ -10,9 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
 
-/**
- * Created by andrewlandsverk on 4/9/15.
- */
+@Cacheable
 @Entity
 public class Event implements Serializable {
 
