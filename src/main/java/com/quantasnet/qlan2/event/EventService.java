@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.quantasnet.qlan2.organization.Organization;
 import com.quantasnet.qlan2.organization.OrganizationGateKeeper;
-import com.quantasnet.qlan2.organization.OrganizationService;
 import com.quantasnet.qlan2.user.User;
 
 /**

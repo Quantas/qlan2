@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.quantasnet.qlan2.event.Event;
 import com.quantasnet.qlan2.event.EventService;
 import com.quantasnet.qlan2.organization.Organization;
-import com.quantasnet.qlan2.organization.OrganizationMember;
 import com.quantasnet.qlan2.organization.OrganizationService;
 import com.quantasnet.qlan2.user.Role;
 import com.quantasnet.qlan2.user.RoleService;
