@@ -27,7 +27,7 @@ import com.quantasnet.qlan2.user.UserService;
  */
 @Transactional
 @Component
-public class DatabaseFillerListener implements ApplicationListener<ContextRefreshedEvent> {
+class DatabaseFillerListener implements ApplicationListener<ContextRefreshedEvent> {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseFillerListener.class);
 
