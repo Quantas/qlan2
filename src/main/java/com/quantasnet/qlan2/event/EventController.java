@@ -48,12 +48,6 @@ public class EventController {
         return "event/notFound";
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public String eventList(final Model model) {
-        model.addAttribute("events", eventService.getAllEvents());
-        return "event/list";
-    }
-
     @HasUserRole
     @RequestMapping(value = "/join/{eventId}", method = RequestMethod.GET)
     public String joinEvent(@PathVariable final Long eventId, @AuthenticationPrincipal final User user) {

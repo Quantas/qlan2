@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
       layout:decorator="layouts/default">
 <head>
 </head>
@@ -10,6 +11,14 @@
     <h1 th:text="${event.name}">Event Name</h1>
     Start: <h4 th:text="${event.start}">Start</h4>
     End: <h4 th:text="${event.end}">End</h4>
+    <div sec:authorize="isAuthenticated()">
+        <h4 th:if="${#lists.contains(event.users, #authentication.principal)}">
+            <a class="btn btn-primary btn-sm" th:href="@{/event/leave/} + ${event.id}">Leave</a>
+        </h4>
+        <h4 th:if="${!#lists.contains(event.users, #authentication.principal)}">
+            <a class="btn btn-primary btn-sm" th:href="@{/event/join/} + ${event.id}">Join</a>
+        </h4>
+    </div>
     <table class="table table-striped table-hover">
         <thead>
         <tr>
