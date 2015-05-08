@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+<head>
+    <script>
+        // <![CDATA[
+        function populateTable(url, tables) {
+            $.getJSON(url, function( data ) {
+                $.each(tables, function () {
+                    var theData = this.dataPath ? data[this.dataPath] : data;
+                    var ignoredKeys = this.ignoredKeys ? this.ignoredKeys : [];
+                    if (theData) {
+                        var tbl_body = "";
+                        $.each(theData, function (k, v) {
+                            if (!(ignoredKeys.indexOf(k) > -1)) {
+                                tbl_body += "<tr><td>" + k + "</td><td>" + v + "</td></tr>";
+                            }
+                        });
+                        $("#" + this.id + " tbody").append(tbl_body);
+                    }
+                });
+            });
+        }
+
+        $(document).ready(function() {
+            populateTable('/management/env', [
+                {
+                    id: 'props-table',
+                    dataPath: 'systemProperties',
+                    ignoredKeys: ['java.class.path', 'java.ext.dirs', 'sun.boot.class.path', 'java.library.path']
+                },
+                {
+                    id: 'app-props-table',
+                    dataPath: 'applicationConfig: [classpath:/application-openshift.properties]'
+                },
+                {
+                    id: 'app-props-table',
+                    dataPath: 'applicationConfig: [classpath:/application-mysql.properties]'
+                },
+                {
+                    id: 'app-props-table',
+                    dataPath: 'applicationConfig: [classpath:/application.properties]'
+                }
+            ]);
+
+            populateTable('/management/metrics', [
+                {
+                    id: 'metrics-table'
+                }
+            ])
+        });
+        // ]]>
+    </script>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Metrics</h1>
+    <table id="metrics-table" class="table table-striped table-hover table-condensed">
+        <thead>
+        <th>Key</th>
+        <th>Value</th>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <h1>QLAN Application Properties</h1>
+    <table id="app-props-table" class="table table-striped table-hover table-responsive">
+        <thead>
+        <th>Key</th>
+        <th>Value</th>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <h1>QLAN System Properties</h1>
+    <table id="props-table" class="table table-striped table-hover table-responsive">
+        <thead>
+        <th>Key</th>
+        <th>Value</th>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>
