@@ -4,10 +4,20 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.CredentialsContainer;
@@ -16,7 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.quantasnet.qlan2.organization.OrganizationMember;
 
-@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @Entity
 @Table(name = "users")
 public class User implements UserDetails, CredentialsContainer, Serializable {
@@ -73,9 +83,11 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
     @Column(name = "user_active", nullable = false)
     private boolean active;
 
+    @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
+    @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private Set<OrganizationMember> organizations;
     

@@ -1,11 +1,20 @@
 package com.quantasnet.qlan2.organization;
 
 import com.quantasnet.qlan2.event.Event;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.Set;
 
-@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @Entity
 public class Organization {
 
@@ -21,10 +30,12 @@ public class Organization {
 	
 	@Column(name = "description")
 	private String description;
-	
+
+	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "org")
 	private Set<OrganizationMember> members;
 
+	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "org")
 	private Set<Event> events;
 	

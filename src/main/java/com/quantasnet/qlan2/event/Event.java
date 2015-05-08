@@ -2,15 +2,24 @@ package com.quantasnet.qlan2.event;
 
 import com.quantasnet.qlan2.organization.Organization;
 import com.quantasnet.qlan2.user.User;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Set;
 
-@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 @Entity
 public class Event implements Serializable {
 
@@ -32,6 +41,7 @@ public class Event implements Serializable {
     @Column(name = "end_date", nullable = false)
     private DateTime end;
 
+    @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
     @ManyToMany
     @JoinColumn(name = "user_id", nullable = false)
     private Set<User> users;
