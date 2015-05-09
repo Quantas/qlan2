@@ -86,7 +86,17 @@ public class Organization {
 	public void setEvents(Set<Event> events) {
 		this.events = events;
 	}
-	
+
+	public boolean isUserStaff(final Long id) {
+		for (final OrganizationMember member : members) {
+			if (member.getUser().getId().equals(id)) {
+				return member.isStaff();
+			}
+		}
+
+		return false;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj.getClass().isAssignableFrom(this.getClass())) {

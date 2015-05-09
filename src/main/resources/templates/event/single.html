@@ -9,6 +9,7 @@
 <body>
 <div layout:fragment="content">
     <h1 th:text="${event.name}">Event Name</h1>
+    <h4><a th:href="@{/org/} + ${event.org.id}" th:text="${event.org.name}">Org</a></h4>
     Start: <h4 th:text="${event.start}">Start</h4>
     End: <h4 th:text="${event.end}">End</h4>
     <div sec:authorize="isAuthenticated()">
