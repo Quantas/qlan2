@@ -1,8 +1,6 @@
 package com.quantasnet.qlan2.organization;
 
-import com.quantasnet.qlan2.event.Event;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,9 +10,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.util.Set;
 
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.quantasnet.qlan2.event.Event;
+
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 public class Organization {
 
@@ -31,11 +33,11 @@ public class Organization {
 	@Column(name = "description")
 	private String description;
 
-	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "org")
 	private Set<OrganizationMember> members;
 
-	@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "org")
 	private Set<Event> events;
 	
@@ -96,11 +98,22 @@ public class Organization {
 
 		return false;
 	}
+	
+	public boolean isUserAMember(final Long id) {
+		for (final OrganizationMember member : members) {
+			if (member.getUser().getId().equals(id)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj.getClass().isAssignableFrom(this.getClass())) {
-			return ((Organization) obj).getId().equals(this.id);
+			final Long objId = ((Organization) obj).getId();
+			return null == objId ? false : objId.equals(this.id);
 		} else {
 			return false;
 		}

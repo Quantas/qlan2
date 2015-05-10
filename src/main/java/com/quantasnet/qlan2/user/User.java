@@ -26,7 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.quantasnet.qlan2.organization.OrganizationMember;
 
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Table(name = "users")
 public class User implements UserDetails, CredentialsContainer, Serializable {
@@ -83,12 +83,12 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
     @Column(name = "user_active", nullable = false)
     private boolean active;
 
-    @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
-    @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
     private Set<OrganizationMember> organizations;
     
     public Long getId() {

@@ -2,23 +2,36 @@ package com.quantasnet.qlan2.event;
 
 import com.quantasnet.qlan2.organization.Organization;
 import com.quantasnet.qlan2.organization.OrganizationGateKeeper;
+import com.quantasnet.qlan2.organization.OrganizationMember;
+import com.quantasnet.qlan2.organization.OrganizationService;
 import com.quantasnet.qlan2.user.User;
+import com.quantasnet.qlan2.user.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 /**
  * Created by andrewlandsverk on 4/9/15.
  */
+@Transactional
 @Service
 public class EventService {
 
 	@Autowired
 	private OrganizationGateKeeper gateKeeper;
 	
+	@Autowired
+	private OrganizationService orgService;
+	
     @Autowired
     private EventRepository eventRepository;
+    
+    @Autowired
+    private UserService userService;
 
     public Optional<Event> getEvent(final Long eventId) {
         return Optional.ofNullable(eventRepository.findOne(eventId));
@@ -26,12 +39,16 @@ public class EventService {
 
     public boolean createEvent(final Event event, final Long id, final User user) {
     	
-    	final Optional<Organization> org = gateKeeper.hasPermissionToDo(user, id, true);
+    	final boolean canDo = gateKeeper.hasPermissionToDo(user, id, true);
     	
-    	if (org.isPresent()) {
-    		event.setOrg(org.get());
-    		eventRepository.save(event);
-    		return true;
+    	if (canDo) {
+    		final Optional<Organization> org = orgService.getOrgById(id);
+    		if (org.isPresent()) {
+	    		event.setOrg(org.get());
+	    		org.get().getEvents().add(event);
+	    		eventRepository.save(event);
+	    		return true;
+    		}
     	}
     	
     	return false;
@@ -39,27 +56,36 @@ public class EventService {
 
     public void createEvent(final Event event, final Organization org) {
         event.setOrg(org);
-        eventRepository.save(event);
+        org.getEvents().add(event);
     }
 
-    public Optional<Event> joinEvent(final Long id, final User user) {
+    public void joinEvent(final Long id, final User user) {
+    	final User dbUser = userService.getUserById(user.getId());
         final Event event = eventRepository.findOne(id);
         if (null != event) {
-            final Optional<Organization> org = gateKeeper.hasPermissionToDo(user, event.getOrg().getId(), false);
-            if (org.isPresent()) {
-                event.getUsers().add(user);
-                eventRepository.save(event);
+            final boolean canDo = gateKeeper.hasPermissionToDo(dbUser, event.getOrg().getId(), false);
+            if (canDo) {
+            	for (final OrganizationMember member : dbUser.getOrganizations()) {
+            		if (member.getOrg().getId().equals(event.getOrg().getId())) {
+            			member.getEvents().add(event);
+            			event.getMembers().add(member);
+            			return;
+            		}
+            	}
             }
         }
-        return Optional.ofNullable(event);
     }
 
-    public Optional<Event> leaveEvent(final Long id, final User user) {
+    public void leaveEvent(final Long id, final User user) {
+    	final User dbUser = userService.getUserById(user.getId());
         final Event event = eventRepository.findOne(id);
         if (null != event) {
-            event.getUsers().remove(user);
-            eventRepository.save(event);
+        	for (final OrganizationMember member : dbUser.getOrganizations()) {
+        		if (member.getOrg().getId().equals(event.getOrg().getId())) {
+        			member.getEvents().remove(event);
+        			event.getMembers().remove(member);
+        		}
+        	}
         }
-        return Optional.ofNullable(event);
     }
 }

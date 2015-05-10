@@ -43,7 +43,7 @@
             <td class="center"><a th:href="@{/event/} + ${event.id}" th:text="${event.name}">Name</a></td>
             <td class="left" th:text="${event.start}">Start</td>
             <td class="left" th:text="${event.end}">End</td>
-            <td class="left" th:text="${#lists.size(event.users)}">1000</td>
+            <td class="left" th:text="${#lists.size(event.members)}">1000</td>
         </tr>
         </tbody>
     </table>
@@ -51,6 +51,10 @@
         <a class="btn btn-primary btn-sm"
            th:if="${org.isUserStaff(#authentication.principal.id)}"
            th:href="@{/event/new/} + ${org.id}">Create Event</a>
+           
+        <a class="btn btn-primary btn-sm"
+        	th:if="${org.isUserAMember(#authentication.principal.id)}"
+        	th:href="@{/org/leave/} + ${org.id}">Leave Organization</a>
     </span>
 </div>
 </body>

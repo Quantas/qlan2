@@ -35,7 +35,7 @@ public class UserAdminService {
 
     public void deleteUser(final long id) {
     	final User user = userRepository.findOne(id);
-        user.getOrganizations().forEach(organizationService::removeOrgMember);
+    	user.getOrganizations().forEach(org -> organizationService.removeOrgMember(org.getOrg().getId(), user));
         userRepository.delete(user);
     }
 

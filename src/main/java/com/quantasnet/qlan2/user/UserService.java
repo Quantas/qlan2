@@ -9,14 +9,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 /**
  * Created by andrewlandsverk on 4/9/15.
  */
+@Transactional
 @Service
 public class UserService {
 
@@ -50,7 +52,6 @@ public class UserService {
         return userRepository.findOne(id);
     }
 
-    @Transactional
     public User saveUser(final User user) {
         if (null == userRepository.getUserByUserName(user.getUserName())) {
             final User returnUser = userFactory.make(user);
@@ -59,13 +60,11 @@ public class UserService {
         return null;
     }
 
-    @Transactional
     public User saveOpenIdUser(final SteamProfile profile) {
         final User newUser = userFactory.makeSteamUser(profile);
         return userRepository.save(newUser);
     }
 
-    @Transactional
     public User save(final String userName, final String firstName,
                      final String lastName, final String email, final String password,
                      final Set<Role> roles) {
@@ -73,12 +72,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional
     public User update(final User user) {
         return userRepository.save(user);
     }
 
-    @Transactional
     public User profileUpdate(final User authUser, final User profileUser) {
         final User dbUser = userRepository.findOne(authUser.getId());
         dbUser.setFirstName(profileUser.getFirstName());
@@ -92,7 +89,6 @@ public class UserService {
         return newUser;
     }
 
-    @Transactional
     public boolean changePassword(final User user, final ChangePasswordForm changePasswordForm) {
         final User dbUser = userRepository.getUserByUserName(user.getUserName());
         if (passwordEncoder.matches(changePasswordForm.getCurrentPassword(), dbUser.getPassword())) {

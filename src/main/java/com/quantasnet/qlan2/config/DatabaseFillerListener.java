@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -43,6 +44,9 @@ class DatabaseFillerListener implements ApplicationListener<ContextRefreshedEven
     @Autowired
     private EventService eventService;
 
+    @Autowired
+    private EhCacheCacheManager cacheManager;
+    
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent contextRefreshedEvent) {
         try {
@@ -65,14 +69,16 @@ class DatabaseFillerListener implements ApplicationListener<ContextRefreshedEven
                 final User adminUser = userService.save("admin", "Admin", "Administrator", "admin@test.com", "admin", rolesAll);
                 final User userUser = userService.save("user", "User", "Userton", "user@test.com", "user", rolesUser);
 
+                adminUser.setOrganizations(new HashSet<>());
+                userUser.setOrganizations(new HashSet<>());
+                
                 // create organization
                 final Organization org = new Organization();
+                org.setEvents(new HashSet<>());
                 org.setName("The QLANs");
                 org.setDescription("Just a test");
 
                 orgService.createOrganization(org, adminUser);
-
-                orgService.addOrgMember(org, userUser, false);
                 
                 // create events
                 final Event event1 = new Event();
@@ -88,6 +94,8 @@ class DatabaseFillerListener implements ApplicationListener<ContextRefreshedEven
                 event2.setEnd(DateTime.now().plusDays(10));
                 
                 eventService.createEvent(event2, org);
+                
+                cacheManager.getCacheManager().clearAll();
                 
             } else {
                 log.info("DB already populated");

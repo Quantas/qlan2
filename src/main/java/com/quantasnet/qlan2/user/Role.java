@@ -1,13 +1,17 @@
 package com.quantasnet.qlan2.user;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+
 import java.io.Serializable;
 
 /**
  * Created by andrewlandsverk on 4/9/15.
  */
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 @Table(name = "role")
 public class Role implements GrantedAuthority, Serializable {

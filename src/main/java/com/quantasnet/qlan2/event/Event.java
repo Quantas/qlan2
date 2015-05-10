@@ -1,25 +1,29 @@
 package com.quantasnet.qlan2.event;
 
-import com.quantasnet.qlan2.organization.Organization;
-import com.quantasnet.qlan2.user.User;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.joda.time.DateTime;
+import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.util.Set;
 
-@Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.DateTime;
+
+import com.quantasnet.qlan2.organization.Organization;
+import com.quantasnet.qlan2.organization.OrganizationMember;
+import com.quantasnet.qlan2.user.User;
+
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
 public class Event implements Serializable {
 
@@ -41,12 +45,13 @@ public class Event implements Serializable {
     @Column(name = "end_date", nullable = false)
     private DateTime end;
 
-    @Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-    @ManyToMany
-    @JoinColumn(name = "user_id", nullable = false)
-    private Set<User> users;
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Set<OrganizationMember> members;
     
-    @ManyToOne(cascade = CascadeType.ALL)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name="org_id", nullable = false)
     private Organization org;
 
@@ -82,13 +87,13 @@ public class Event implements Serializable {
         this.end = end;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public Set<OrganizationMember> getMembers() {
+        return members;
     }
 
-    public void setUsers(final Set<User> users) {
-        this.users = users;
-    }
+    public void setMembers(Set<OrganizationMember> members) {
+		this.members = members;
+	}
     
     public Organization getOrg() {
 		return org;
@@ -97,4 +102,28 @@ public class Event implements Serializable {
     public void setOrg(Organization org) {
 		this.org = org;
 	}
+    
+	@Override
+	public boolean equals(Object obj) {
+		if (obj.getClass().isAssignableFrom(this.getClass())) {
+			final Long objId = ((Event) obj).getId();
+			return null == objId ? false : objId.equals(this.id);
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode() {
+		return null == id ? -1 : id.intValue();
+	}
+    
+    public boolean containsUser(final User user) {
+    	for (final OrganizationMember member : members) {
+    		if (member.getUser().equals(user)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
 }

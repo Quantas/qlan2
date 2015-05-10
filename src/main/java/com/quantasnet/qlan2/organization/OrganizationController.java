@@ -1,7 +1,8 @@
 package com.quantasnet.qlan2.organization;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -34,12 +35,25 @@ public class OrganizationController {
 		if (null == user) {
 			model.addAttribute("allOrgs", orgService.getAllOrgs());
 		} else {
-			final List<Organization> allOrgs = orgService.getAllOrgs();
-			final List<Organization> myOrgs = orgService.getUsersOrgs(user);
+			final Set<OrganizationMember> myOrgs = orgService.getUserOrgs(user);
+			final Set<Organization> notMyOrgs = new HashSet<>();
 			
-			allOrgs.removeAll(myOrgs);
+			for (final Organization org : orgService.getAllOrgs()) {
+				boolean contains = false;
+				for (final OrganizationMember member : myOrgs) {
+					if (org.getMembers().contains(member)) {
+						contains = true;
+						break;
+					}
+				}
+				
+				if (!contains) {
+					notMyOrgs.add(org);
+				}
+				
+			}
 			
-			model.addAttribute("allOrgs", allOrgs);
+			model.addAttribute("allOrgs", notMyOrgs);
 			model.addAttribute("orgs", myOrgs);
 		}
 		

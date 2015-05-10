@@ -13,10 +13,10 @@
     Start: <h4 th:text="${event.start}">Start</h4>
     End: <h4 th:text="${event.end}">End</h4>
     <div sec:authorize="isAuthenticated()">
-        <h4 th:if="${#lists.contains(event.users, #authentication.principal)}">
+        <h4 th:if="${event.containsUser(#authentication.principal)}">
             <a class="btn btn-primary btn-sm" th:href="@{/event/leave/} + ${event.id}">Leave</a>
         </h4>
-        <h4 th:if="${!#lists.contains(event.users, #authentication.principal)}">
+        <h4 th:if="${!event.containsUser(#authentication.principal) and event.org.isUserAMember(#authentication.principal.id)}">
             <a class="btn btn-primary btn-sm" th:href="@{/event/join/} + ${event.id}">Join</a>
         </h4>
     </div>
@@ -27,8 +27,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="user : ${event.users}">
-            <td class="center" th:text="${user.userName}">User Name</td>
+        <tr th:each="member : ${event.members}">
+            <td class="center" th:text="${member.user.userName}">User Name</td>
         </tr>
         </tbody>
     </table>

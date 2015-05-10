@@ -19,8 +19,8 @@
 	        </thead>
 	        <tbody>
 	        <tr th:each="org : ${orgs}">
-	            <td class="left"><a th:href="@{/org/} + ${org.id}" th:text="${org.name}">Name</a></td>
-	            <td class="left" th:text="${org.description}">Desc</td>
+	            <td class="left"><a th:href="@{/org/} + ${org.org.id}" th:text="${org.org.name}">Name</a></td>
+	            <td class="left" th:text="${org.org.description}">Desc</td>
 	        </tr>
 	        </tbody>
 	    </table>

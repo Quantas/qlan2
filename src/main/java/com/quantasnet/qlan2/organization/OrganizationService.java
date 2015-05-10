@@ -1,15 +1,16 @@
 package com.quantasnet.qlan2.organization;
 
-import com.quantasnet.qlan2.user.User;
-import com.quantasnet.qlan2.user.UserService;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.quantasnet.qlan2.user.User;
 
+@Transactional
 @Service
 public class OrganizationService {
 
@@ -18,52 +19,38 @@ public class OrganizationService {
 
 	@Autowired
 	private OrganizationMemberRepository orgMemberRepository;
-
-	@Autowired
-	private UserService userService;
-
-	public List<Organization> getUsersOrgs(final User user) {
-		return userService.getUserById(user.getId())
-				.getOrganizations()
-				.stream()
-				.map(OrganizationMember::getOrg)
-				.collect(Collectors.toList());
+	
+	public Set<Organization> getAllOrgs() {
+		return organizationRepository.getAllOrgs();
 	}
 	
-	public List<Organization> getAllOrgs() {
-		return organizationRepository.findAll();
+	public Set<OrganizationMember> getUserOrgs(final User user) {
+		return organizationRepository.getUserOrgs(user.getId());
 	}
 	
 	public Optional<Organization> getOrgById(final Long id) {
 		return Optional.ofNullable(organizationRepository.findOne(id));
 	}
 
-	@Transactional
-	public Organization save(final Organization org) {
-		return organizationRepository.save(org);
-	}
-
-	@Transactional
 	public void createOrganization(final Organization org, final User user) {
-		this.save(org);
+		org.setEvents(new HashSet<>());
+		org.setMembers(new HashSet<>());
 		addOrgMember(org, user, true);
+		organizationRepository.save(org);
 	}
 
-	@Transactional
-	public OrganizationMember addOrgMember(final Long orgId, final User user) {
+	public void addOrgMember(final Long orgId, final User user) {
 		final Organization org = organizationRepository.findOne(orgId);
 
 		for (final OrganizationMember member : org.getMembers()) {
 			if (member.getUser().getId().equals(user.getId())) {
-				return member;
+				return;
 			}
 		}
-
-		return addOrgMember(org, user, false);
+		addOrgMember(org, user, false);
 	}
 
-	@Transactional
-	public OrganizationMember addOrgMember(final Organization org, final User user, final boolean staff) {
+	private void addOrgMember(final Organization org, final User user, final boolean staff) {
 		final OrganizationMember member = new OrganizationMember();
 		if (staff) {
 			member.setRole("Admin");
@@ -73,31 +60,21 @@ public class OrganizationService {
 		member.setStaff(staff);
 		member.setUser(user);
 		member.setOrg(org);
-		return orgMemberRepository.save(member);
+		
+		user.getOrganizations().add(member);
+		org.getMembers().add(member);
 	}
 
-	@Transactional
-	public void removeOrgMember(final OrganizationMember member) {
-		member.getOrg().getMembers().remove(member);
-		removeUserFromOrgEvents(member);
-	}
-
-	@Transactional
 	public void removeOrgMember(final Long orgId, final User user) {
-		for (final Organization org : getUsersOrgs(user)) {
-			if (org.getId().equals(orgId)) {
-				for (final OrganizationMember member : org.getMembers()) {
-					if (member.getUser().getId().equals(user.getId())) {
-						member.getOrg().getMembers().remove(member);
-						removeUserFromOrgEvents(member);
-						return;
-					}
+		final Organization org = organizationRepository.findOne(orgId);
+		if (org.getId().equals(orgId)) {
+			for (final OrganizationMember member : org.getMembers()) {
+				if (member.getUser().getId().equals(user.getId())) {
+					org.getEvents().forEach(event -> event.getMembers().remove(member));
+					org.getMembers().remove(member);
+					return;
 				}
 			}
 		}
-	}
-
-	private void removeUserFromOrgEvents(final OrganizationMember member) {
-		member.getOrg().getEvents().forEach(event -> event.getUsers().remove(member.getUser()));
 	}
 }

@@ -2,8 +2,6 @@ package com.quantasnet.qlan2.organization;
 
 import java.util.Optional;
 
-import com.quantasnet.qlan2.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.quantasnet.qlan2.user.User;
@@ -11,12 +9,9 @@ import com.quantasnet.qlan2.user.User;
 @Component
 public class OrganizationGateKeeper {
 
-	@Autowired
-	private UserService userService;
-
-	public Optional<Organization> hasPermissionToDo(final User user, final Long orgId, final boolean staff) {
+	public boolean hasPermissionToDo(final User user, final Long orgId, final boolean staff) {
 		final Optional<OrganizationMember> org =
-				userService.getUserById(user.getId())
+				user
 						.getOrganizations()
 						.stream()
 						.filter(o -> o.getOrg().getId().equals(orgId))
@@ -33,15 +28,15 @@ public class OrganizationGateKeeper {
 			if (member.isPresent()) {
 				if (staff) {
 					if (member.get().isStaff()) {
-						return Optional.of(theOrg);
+						return true;
 					}
 				} else {
-					return Optional.of(theOrg);
+					return true;
 				}
 			}
     	}
     	
-    	return Optional.empty();
+    	return false;
 	}
 	
 }
