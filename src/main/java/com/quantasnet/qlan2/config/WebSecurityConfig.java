@@ -21,6 +21,9 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 
 import com.quantasnet.qlan2.security.QlanUserDetailsService;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by andrewlandsverk on 4/8/15.
@@ -71,7 +74,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .sessionManagement().sessionFixation().changeSessionId()
             .and()
-                .rememberMe().key(KEY).rememberMeServices(rememberMeServices());
+                .rememberMe().key(KEY).rememberMeServices(rememberMeServices())
+            .and()
+                .csrf()
+                    .disable();
     }
 
     @Autowired

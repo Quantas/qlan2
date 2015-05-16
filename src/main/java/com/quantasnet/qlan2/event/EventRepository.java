@@ -1,10 +1,10 @@
 package com.quantasnet.qlan2.event;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
  * Created by andrewlandsverk on 4/9/15.
  */
-interface EventRepository extends JpaRepository<Event, Long> {
+public interface EventRepository extends PagingAndSortingRepository<Event, Long> {
 
 }

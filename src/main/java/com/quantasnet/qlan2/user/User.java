@@ -1,8 +1,14 @@
 package com.quantasnet.qlan2.user;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.quantasnet.qlan2.organization.OrganizationMember;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.CredentialsContainer;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,16 +21,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.security.core.CredentialsContainer;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import com.quantasnet.qlan2.organization.OrganizationMember;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Set;
 
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
@@ -44,6 +43,7 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
     @Column(name = "user_name", nullable = false, unique = true, length = 255)
     private String userName;
 
+    @JsonIgnore
     @NotEmpty(message = "Password is required.")
     @Size(min = 8, max = 255, message = "Password must be at least 8 characters.")
     @Pattern(regexp = PASSWORD_REGEX, message = "Password must be at least 8 characters and contain a number.")
@@ -211,6 +211,7 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
     
     // UserDetails methods
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
@@ -221,21 +222,25 @@ public class User implements UserDetails, CredentialsContainer, Serializable {
         return getUserName();
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return isActive();

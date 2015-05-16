@@ -1,14 +1,13 @@
 package com.quantasnet.qlan2.organization;
 
-import java.util.Set;
-
-import javax.persistence.QueryHint;
-
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-interface OrganizationRepository extends JpaRepository<Organization, Long> {
+import javax.persistence.QueryHint;
+import java.util.Set;
+
+public interface OrganizationRepository extends PagingAndSortingRepository<Organization, Long> {
 
 	@QueryHints({@QueryHint(name="org.hibernate.cacheable", value = "true")})
 	@Query("SELECT o FROM Organization o")

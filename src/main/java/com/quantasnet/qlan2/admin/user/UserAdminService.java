@@ -1,5 +1,6 @@
 package com.quantasnet.qlan2.admin.user;
 
+import com.google.common.collect.Lists;
 import com.quantasnet.qlan2.organization.OrganizationService;
 import com.quantasnet.qlan2.security.HasAdminRole;
 import com.quantasnet.qlan2.user.Role;
@@ -30,7 +31,7 @@ public class UserAdminService {
     private UserFactory userFactory;
 
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return Lists.newArrayList(userRepository.findAll());
     }
 
     public void deleteUser(final long id) {

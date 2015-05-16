@@ -1,10 +1,10 @@
 package com.quantasnet.qlan2.user;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
  * Created by andrewlandsverk on 4/9/15.
  */
-public interface RoleRepository extends JpaRepository<Role, Long> {
+interface RoleRepository extends PagingAndSortingRepository<Role, Long> {
     Role findByRoleName(String roleName);
 }
