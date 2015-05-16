@@ -5,14 +5,11 @@ import com.quantasnet.qlan2.organization.OrganizationGateKeeper;
 import com.quantasnet.qlan2.organization.OrganizationMember;
 import com.quantasnet.qlan2.organization.OrganizationService;
 import com.quantasnet.qlan2.user.User;
-import com.quantasnet.qlan2.user.UserService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 /**
  * Created by andrewlandsverk on 4/9/15.
@@ -30,9 +27,6 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
     
-    @Autowired
-    private UserService userService;
-
     public Optional<Event> getEvent(final Long eventId) {
         return Optional.ofNullable(eventRepository.findOne(eventId));
     }
@@ -60,12 +54,11 @@ public class EventService {
     }
 
     public void joinEvent(final Long id, final User user) {
-    	final User dbUser = userService.getUserById(user.getId());
         final Event event = eventRepository.findOne(id);
         if (null != event) {
-            final boolean canDo = gateKeeper.hasPermissionToDo(dbUser, event.getOrg().getId(), false);
+            final boolean canDo = gateKeeper.hasPermissionToDo(user, event.getOrg().getId(), false);
             if (canDo) {
-            	for (final OrganizationMember member : dbUser.getOrganizations()) {
+            	for (final OrganizationMember member : user.getOrganizations()) {
             		if (member.getOrg().getId().equals(event.getOrg().getId())) {
             			member.getEvents().add(event);
             			event.getMembers().add(member);
@@ -77,15 +70,14 @@ public class EventService {
     }
 
     public void leaveEvent(final Long id, final User user) {
-    	final User dbUser = userService.getUserById(user.getId());
         final Event event = eventRepository.findOne(id);
         if (null != event) {
-        	for (final OrganizationMember member : dbUser.getOrganizations()) {
-        		if (member.getOrg().getId().equals(event.getOrg().getId())) {
-        			member.getEvents().remove(event);
-        			event.getMembers().remove(member);
-        		}
-        	}
+			user.getOrganizations().forEach(member -> {
+				if (member.getOrg().getId().equals(event.getOrg().getId())) {
+					member.getEvents().remove(event);
+					event.getMembers().remove(member);
+				}
+			});
         }
     }
 }
