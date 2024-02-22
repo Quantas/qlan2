@@ -25,7 +25,7 @@
 		<java.version>1.8</java.version>
 
 		<!-- Dependency Versions -->
-		<org.postgresql.version>9.4-1201-jdbc41</org.postgresql.version>
+		<org.postgresql.version>42.3.9</org.postgresql.version>
 		
 		<org.webjars.bootstrap.version>3.3.1</org.webjars.bootstrap.version>
 		<org.webjars.fontawesome.version>4.2.0</org.webjars.fontawesome.version>
